@@ -41,7 +41,7 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.fuzzy_match.clicked.connect(self.random_poem)
 
 	def load_metadata(self):
-		with open('./bookshelf/metadata.txt', 'r') as metas:
+		with open('./metadata.txt', 'r') as metas:
 			self.book_status = metas.readlines()
 			
 	def memorized_poem(self):
@@ -57,7 +57,7 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		global poem_name
 		try:
 			new_meta = []
-			catalogue = "./bookshelf/metadata.txt"
+			catalogue = "./metadata.txt"
 			with open(catalogue, "r") as metas:
 				current_meta = metas.readlines()
 				for i in current_meta:
