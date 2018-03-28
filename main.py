@@ -39,6 +39,7 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.obfuscator.sliderReleased.connect(self.obfuscate_poem)
 		self.poem_progress.valueChanged.connect(self.chicken_dinner)
 		self.fuzzy_match.clicked.connect(self.random_poem)
+		self.actionOpen.triggered.connect(self.open_poem)
 
 	def load_metadata(self):
 		with open('./metadata.txt', 'r') as metas:
@@ -104,7 +105,21 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 				self.poemdisplay.setText("")
 				self.lineentry.setText("")
 				self.print_current_poem()
-					
+	
+	def open_poem(self):
+		global current_poem
+		current_poem = []
+		filename = QtWidgets.QFileDialog.getOpenFileName(self, "Load poem", "./bookshelf")
+		poem = filename[0]
+		poem_name = poem.split("/")[-1]
+		self.update_name(poem_name)
+		with open(poem, "r") as page:
+			raw_poem = page.readlines()
+			for index, i in enumerate(raw_poem):
+				current_poem.append([index, i])
+				self.progress_whole = len(current_poem)
+		self.print_current_poem()
+	
 	def random_poem(self):
 		'''loads random poem'''
 		global current_poem
