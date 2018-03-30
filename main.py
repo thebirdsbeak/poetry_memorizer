@@ -16,6 +16,7 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 	def __init__(self, parent=mygui.Ui_MainWindow):
 		''' Initialiser for new poem window '''
 		super(NewPoem, self).__init__(parent)
+		self.setWindowIcon(QtGui.QIcon('leon.ico'))
 		self.setupUi(self)
 		self.nameInput.setStyleSheet("background-color:  #ff666b")
 		self.authorInput.setStyleSheet("background-color:  #ff666b")
