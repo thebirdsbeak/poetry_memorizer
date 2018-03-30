@@ -149,6 +149,8 @@ Try the different to increase the difficulty as you advance.")
 		self.saveTimeButton.setEnabled(False)
 		self.activate_buttons(False)
 		self.dialog = NewPoem(self)
+		self.wpm = float
+		self.poem_buffer = []
 			
 	### Events ###
 		self.lineentry.returnPressed.connect(self.enter_line)
@@ -172,6 +174,8 @@ Try the different to increase the difficulty as you advance.")
 	
 	def timer(self):
 		self.refresh_poem()
+		self.poem_buffer = []
+		self.wpmLcd.display(0)
 		self.timerLcd.display(0)
 		self.startTimeButton.setText("Restart")
 		self.timer_enabled = True
@@ -184,6 +188,17 @@ Try the different to increase the difficulty as you advance.")
 		current_time = time.time()
 		time_delta = current_time - float(self.timer_var)
 		self.timerLcd.display(time_delta)
+	
+	def get_wpm(self, signal):
+		poem_line = signal.split(" ")
+		self.poem_buffer.append(poem_line)
+		word_count = 0
+		current_time = time.time()
+		time_delta = current_time - float(self.timer_var)
+		for i in self.poem_buffer:
+			word_count += len(i)
+		self.wpm = ((word_count + 1) / (time_delta / 60))
+		self.wpmLcd.display(self.wpm)
 	
 	def activate_buttons(self, bool):
 		self.hide.setEnabled(bool)
@@ -259,7 +274,10 @@ Try the different to increase the difficulty as you advance.")
 			if str(current_poem[0][1].strip()) == "":
 				del current_poem[0]
 			if self.obfusc_flag == False:
-				if entered_text == str(current_poem[0][1].strip()):
+				current_line = str(current_poem[0][1].strip())
+				if entered_text == current_line:
+					if self.timer_enabled == True:
+						self.get_wpm(current_line)
 					del current_poem[0]
 					current_progress = len(current_poem)
 					progress = int(((self.progress_whole - current_progress)/self.progress_whole) * 100)
