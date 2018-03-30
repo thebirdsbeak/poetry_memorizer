@@ -147,21 +147,13 @@ Try the different to increase the difficulty as you advance.")
 		self.fuzzy_match.clicked.connect(self.random_poem)
 		self.actionOpen.triggered.connect(self.open_poem)
 		self.actionNew.triggered.connect(self.new_poem)
-		self.actionEdit.triggered.connect(self.edit_poem)
 		self.dialog = NewPoem(self)
 
 	### Functions ###
 	def new_poem(self):
 		''' handler for new poem window '''
-		global edit_status
-		edit_status = False
 		self.dialog.show()
 		
-	def edit_poem(self):
-		global edit_status
-		edit_status = True
-		self.dialog.show()
-
 	def load_metadata(self):
 		''' May be used for 'use all' etc... functionality '''
 		with open('./metadata.txt', 'r') as metas:
