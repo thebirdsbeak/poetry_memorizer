@@ -7,10 +7,12 @@ from random import choice, shuffle
 import mygui
 import newpoem
 
+edit_status = False
 
-class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_MainWindow):
+class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 	
-	def __init__(self, parent=None):
+	### Setup ###
+	def __init__(self, parent=mygui.Ui_MainWindow):
 		''' Initialiser for new poem window '''
 		super(NewPoem, self).__init__(parent)
 		self.setupUi(self)
@@ -18,14 +20,16 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_MainWindow):
 		self.authorInput.setStyleSheet("background-color:  #ff666b")
 		self.poemInput.setStyleSheet("background-color:  #ff666b")
 	
-	### Events ###	
+	### Events ###
 		self.nameInput.textEdited.connect(self.poem_name_input)
 		self.authorInput.textEdited.connect(self.author_name_input)
 		self.poemInput.textChanged.connect(self.poem_text_input)
 		self.saveButton.setEnabled(False)
 		self.saveButton.clicked.connect(self.save_poem)
 		self.cancelButton.clicked.connect(self.cancel_new_poem)
+		self.editButton.clicked.connect(self.edit_poem)
 		
+	### Functions ###
 	def poem_name_input(self):
 		''' Triggers styling for poem name '''
 		entered_text = str(self.nameInput.text())
@@ -84,11 +88,27 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_MainWindow):
 					save_me.write(text_to_save)
 				self.poemStatus.setText("Saved {}".format(file_name))
 	
+	def edit_poem(self):
+		filename = QtWidgets.QFileDialog.getOpenFileName(self, "Edit poem", "./bookshelf")
+		poem = filename[0]
+		poem_name = poem.split("/")[-1]
+		raw_poem_name = poem_name.replace(".txt", "").title().replace("_", " ")
+		formatted_poem_name = raw_poem_name.split("-")
+		self.poemStatus.setText(raw_poem_name)
+		self.nameInput.setText(formatted_poem_name[0])
+		self.authorInput.setStyleSheet("background-color: #99ff99")
+		self.nameInput.setStyleSheet("background-color: #99ff99")
+		self.authorInput.setText(formatted_poem_name[1])
+		with open(poem, "r") as read_poem:
+			raw_poem = read_poem.read()
+			self.poemInput.setPlainText(raw_poem)
+	
 	def cancel_new_poem(self):
 		self.hide()
 			
 class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 	
+	### Variables ###
 	current_poem = []
 	obfuscated_poem = []	
 	poem_name = ""
@@ -109,7 +129,9 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 	
 	### Events ###
-		self.poemdisplay.setText("Welcome to Learnatron-8000")
+		self.poemdisplay.setText("Welcome to poetry memorizer!\n\n\
+Open a poem, then enter each line until complete.\n\
+Try the different to increase the difficulty as you advance.")
 		self.lineentry.returnPressed.connect(self.enter_line)
 		self.actionRandom.triggered.connect(self.random_poem)
 		self.actionMove_to_memorised.triggered.connect(self.memorized_poem)
@@ -125,12 +147,19 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.fuzzy_match.clicked.connect(self.random_poem)
 		self.actionOpen.triggered.connect(self.open_poem)
 		self.actionNew.triggered.connect(self.new_poem)
+		self.actionEdit.triggered.connect(self.edit_poem)
 		self.dialog = NewPoem(self)
-
 
 	### Functions ###
 	def new_poem(self):
 		''' handler for new poem window '''
+		global edit_status
+		edit_status = False
+		self.dialog.show()
+		
+	def edit_poem(self):
+		global edit_status
+		edit_status = True
 		self.dialog.show()
 
 	def load_metadata(self):
@@ -400,7 +429,8 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		''' Triggers events on completion of poem entry '''
 		if self.poem_progress.value() == 100:
 			self.footer_label.setText("Well done! Refresh to go again.")
-	
+
+	### Launch ###
 app = QtWidgets.QApplication(sys.argv)
 form = MainDialog()
 form.show()

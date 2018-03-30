@@ -14,7 +14,7 @@ Current features:
 In progress:
 
 * Select random poem based on status (learning, memorised, all)
-* The ability to add new poems manually
+* The ability to edit existing poem
 
 Potential future additions:
 
