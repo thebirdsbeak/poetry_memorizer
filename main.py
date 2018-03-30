@@ -166,15 +166,15 @@ Try the different to increase the difficulty as you advance.")
 		self.actionOpen.triggered.connect(self.open_poem)
 		self.actionNew.triggered.connect(self.new_poem)
 		self.startTimeButton.clicked.connect(self.timer)
-#		self.saveTimeButton.clicked.connect(self.get_timer)
 		self.dialog = NewPoem(self)
 
 	### Functions ###
 	
 	def timer(self):
 		self.timerLcd.display(0)
-		self.startTimeButton.setText("Restart")
+		self.startTimeButton.setText("Restart (ctrl-r)")
 		self.timer_enabled = True
+		self.startTimeButton.setStyleSheet("background-color: #99ff99")
 		self.timer_var = time.time()
 		
 	def get_timer(self):
@@ -471,6 +471,7 @@ Try the different to increase the difficulty as you advance.")
 			self.final_time = time.time() - self.timer_var
 			self.timerLcd.display(self.final_time)
 			self.saveTimeButton.setEnabled(True)
+			self.startTimeButton.setStyleSheet("background-color:  #ff666b")
 			self.timer_enabled = False
 			self.footer_label.setText("Well done! Refresh to go again.")
 
