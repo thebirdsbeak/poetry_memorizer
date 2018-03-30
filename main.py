@@ -10,8 +10,41 @@ import newpoem
 class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_MainWindow):
 	
 	def __init__(self, parent=None):
+		''' Initialiser for new poem window '''
 		super(NewPoem, self).__init__(parent)
 		self.setupUi(self)
+		self.nameInput.setStyleSheet("background-color:  #ff666b")
+		self.authorInput.setStyleSheet("background-color:  #ff666b")
+		self.poemInput.setStyleSheet("background-color:  #ff666b")
+			
+	### Events ###	
+		self.nameInput.textEdited.connect(self.poem_name_input)
+		self.authorInput.textEdited.connect(self.author_name_input)
+		self.poemInput.textChanged.connect(self.poem_text_input)
+		
+	def poem_name_input(self):
+		entered_text = str(self.nameInput.text())
+		if entered_text == "":
+			self.nameInput.setStyleSheet("background-color:  #ff666b")
+		else:
+			self.nameInput.setStyleSheet("background-color: #99ff99")
+			
+	def author_name_input(self):
+		entered_text = str(self.authorInput.text())
+		if entered_text == "":
+			self.authorInput.setStyleSheet("background-color:  #ff666b")
+		else:
+			self.authorInput.setStyleSheet("background-color: #99ff99")
+
+	def poem_text_input(self):
+		entered_text = str(self.poemInput.toPlainText())
+		if entered_text == "":
+			self.poemInput.setStyleSheet("background-color:  #ff666b")
+		else:
+			self.poemInput.setStyleSheet("background-color: #99ff99")
+
+	def test_for_save():
+		if 
 
 class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 	
@@ -25,6 +58,7 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.setupUi(self)
 		self.book_status = []
 		self.load_metadata()
+		
 	### Settings ###
 		self.line_numbers = False
 		self.display_toggle = False
@@ -32,7 +66,8 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.obfusc_flag = False
 		self.progress_whole = 0
 		self.alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-	### Actions ###
+	
+	### Events ###
 		self.poemdisplay.setText("Welcome to Learnatron-8000")
 		self.lineentry.returnPressed.connect(self.enter_line)
 		self.actionRandom.triggered.connect(self.random_poem)
@@ -48,26 +83,34 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.poem_progress.valueChanged.connect(self.chicken_dinner)
 		self.fuzzy_match.clicked.connect(self.random_poem)
 		self.actionOpen.triggered.connect(self.open_poem)
-		self.actionUse_all.triggered.connect(self.new_poem)
+		self.actionNew.triggered.connect(self.new_poem)
 		self.dialog = NewPoem(self)
 
+
+	### Functions ###
 	def new_poem(self):
+		''' handler for new poem window '''
 		self.dialog.show()
 
 	def load_metadata(self):
+		''' May be used for 'use all' etc... functionality '''
 		with open('./metadata.txt', 'r') as metas:
 			self.book_status = metas.readlines()
 			
 	def memorized_poem(self):
+		''' Set poem metadata to memorized '''
 		self.amend_book_info("m")
 
 	def learn_poem(self):
+		''' Set poem metadata to learning '''
 		self.amend_book_info("l")
 		
 	def ignore_poem(self):
+		''' Set poem metadata to ignore '''
 		self.amend_book_info("x")
 			
 	def amend_book_info(self, signal):
+		''' Takes relevant signal and sets books meta status'''
 		global poem_name
 		try:
 			new_meta = []
@@ -94,12 +137,14 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		except NameError:
 			return
 			
-		### Functions ###
+
 	def enter_line(self):
 		'''Tests line against first line in current_poem'''
 		global current_poem
 		global obfuscated_poem
 		entered_text = str(self.lineentry.text())
+		if str(current_poem[0][1].strip()) == "":
+			del current_poem[0]
 		if self.obfusc_flag == False:
 			if entered_text == str(current_poem[0][1].strip()):
 				del current_poem[0]
@@ -120,6 +165,7 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 				self.print_current_poem()
 	
 	def open_poem(self):
+		''' Load a poem from file explorer '''
 		global current_poem
 		current_poem = []
 		filename = QtWidgets.QFileDialog.getOpenFileName(self, "Load poem", "./bookshelf")
@@ -134,7 +180,7 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.print_current_poem()
 	
 	def random_poem(self):
-		'''loads random poem'''
+		'''Loads random poem'''
 		global current_poem
 		current_poem = []
 		self.poem_progress.setProperty("value", 0)
@@ -166,6 +212,7 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		global poem_name
 		global current_poem
 		current_poem = []
+		self.footer_label.setText("The fiftieth time's the charm!")
 		self.poem_progress.setProperty("value", 0)
 		self.poemdisplay.setText("")
 		with open ("./bookshelf/"+poem_name, "r") as page:
@@ -176,6 +223,7 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.print_current_poem()
 		
 	def obfuscate_poem(self):
+		''' Variable obfuscator for words in poem. '''
 		global obfuscated_poem
 		global current_poem
 		current_poem = []
@@ -217,11 +265,12 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 
 	
 	def voice_over(self):
-		'''reads first line  of current poem'''
+		''' Reads first line of current poem aloud '''
 		global current_poem
 		call(["espeak", current_poem[0][1]])
 		
 	def toggle_line_nos(self):
+		''' Toggles line numbers '''
 		if self.line_numbers == True:
 			self.line_numbers = False
 			try:
@@ -236,6 +285,7 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 				return
 		
 	def toggle_display_mode(self):
+		''' Toggles line by line display mode '''
 		if self.display_toggle == True:
 			self.display_mode.setText("Line by line")
 			self.display_toggle = False
@@ -246,6 +296,7 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 			self.print_current_poem()
 	
 	def toggle_hide(self):
+		''' Toggles hide text mode '''
 		if self.hide_text == True:
 			self.hide.setText("Hide")
 			self.hide_text = False
@@ -305,6 +356,7 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 			self.poemdisplay.verticalScrollBar().setValue(0)	
 					
 	def chicken_dinner(self):
+		''' Triggers events on completion of poem entry '''
 		if self.poem_progress.value() == 100:
 			self.footer_label.setText("Well done! Refresh to go again.")
 	

@@ -71,9 +71,9 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.poemName.setText(_translate("MainWindow", "TextLabel"))
-        self.authorName.setText(_translate("MainWindow", "TextLabel"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "New Poem"))
+        self.poemName.setText(_translate("MainWindow", "Poem name"))
+        self.authorName.setText(_translate("MainWindow", "Author"))
         self.poemStatus.setText(_translate("MainWindow", "Not  Saved"))
         self.cancelButton.setText(_translate("MainWindow", "Cancel"))
         self.saveButton.setText(_translate("MainWindow", "Save"))

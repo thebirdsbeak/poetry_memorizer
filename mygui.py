@@ -115,8 +115,11 @@ class Ui_MainWindow(object):
         self.actionUse_all.setObjectName("actionUse_all")
         self.actionUse_learning = QtWidgets.QAction(MainWindow)
         self.actionUse_learning.setObjectName("actionUse_learning")
+        self.actionNew = QtWidgets.QAction(MainWindow)
+        self.actionNew.setObjectName("actionNew")
         self.menuNew_poem.addAction(self.actionOpen)
         self.menuNew_poem.addAction(self.actionRandom)
+        self.menuNew_poem.addAction(self.actionNew)
         self.menuSettings.addAction(self.actionUse_all)
         self.menuSettings.addAction(self.actionUse_learning)
         self.menuLexpad.addAction(self.menuNew_poem.menuAction())
@@ -154,6 +157,7 @@ class Ui_MainWindow(object):
         self.actionRandom.setText(_translate("MainWindow", "Random"))
         self.actionUse_all.setText(_translate("MainWindow", "Use all"))
         self.actionUse_learning.setText(_translate("MainWindow", "Use learning"))
+        self.actionNew.setText(_translate("MainWindow", "New"))
 
 
 if __name__ == "__main__":
