@@ -32,6 +32,7 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 		self.editButton.clicked.connect(self.edit_poem)
 		
 	### Functions ###
+			
 	def poem_name_input(self):
 		''' Triggers styling for poem name '''
 		entered_text = str(self.nameInput.text())
@@ -132,6 +133,9 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.load_metadata()
 		
 	### Settings ###
+		self.poemdisplay.setText("Welcome to poetry memorizer!\n\n\
+Open a poem, then enter each line until complete.\n\
+Try the different to increase the difficulty as you advance.")		
 		self.line_numbers = False
 		self.display_toggle = False
 		self.hide_text = False
@@ -144,12 +148,9 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.timer_enabled = False
 		self.saveTimeButton.setEnabled(False)
 		self.activate_buttons(False)
-
+		self.dialog = NewPoem(self)
 			
 	### Events ###
-		self.poemdisplay.setText("Welcome to poetry memorizer!\n\n\
-Open a poem, then enter each line until complete.\n\
-Try the different to increase the difficulty as you advance.")
 		self.lineentry.returnPressed.connect(self.enter_line)
 		self.actionRandom.triggered.connect(self.random_poem)
 		self.actionMove_to_memorised.triggered.connect(self.memorized_poem)
@@ -166,17 +167,19 @@ Try the different to increase the difficulty as you advance.")
 		self.actionOpen.triggered.connect(self.open_poem)
 		self.actionNew.triggered.connect(self.new_poem)
 		self.startTimeButton.clicked.connect(self.timer)
-		self.dialog = NewPoem(self)
 
 	### Functions ###
 	
 	def timer(self):
+		self.refresh_poem()
 		self.timerLcd.display(0)
-		self.startTimeButton.setText("Restart (ctrl-r)")
+		self.startTimeButton.setText("Restart")
 		self.timer_enabled = True
+		self.saveTimeButton.setEnabled(False)
 		self.startTimeButton.setStyleSheet("background-color: #99ff99")
 		self.timer_var = time.time()
-		
+		self.lineentry.setFocus()
+			
 	def get_timer(self):
 		current_time = time.time()
 		time_delta = current_time - float(self.timer_var)
@@ -468,10 +471,10 @@ Try the different to increase the difficulty as you advance.")
 	def chicken_dinner(self):
 		''' Triggers events on completion of poem entry '''
 		if self.poem_progress.value() == 100:
-			self.final_time = time.time() - self.timer_var
-			self.timerLcd.display(self.final_time)
-			self.saveTimeButton.setEnabled(True)
-			self.startTimeButton.setStyleSheet("background-color:  #ff666b")
+			if self.timer_enabled == True:
+				self.final_time = time.time() - self.timer_var
+				self.timerLcd.display(self.final_time)
+			self.startTimeButton.setStyleSheet("background-color:")
 			self.timer_enabled = False
 			self.footer_label.setText("Well done! Refresh to go again.")
 
