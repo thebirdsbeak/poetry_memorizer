@@ -131,7 +131,6 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		super(MainDialog, self).__init__(parent)
 		self.setupUi(self)
 		self.book_status = []
-		self.load_metadata()
 		
 	### Settings ###
 		self.poemdisplay.setText("Welcome to poetry memorizer!\n\n\
@@ -152,6 +151,7 @@ Try the different to increase the difficulty as you advance.")
 		self.dialog = NewPoem(self)
 		self.wpm = float
 		self.poem_buffer = []
+		self.bookshelf_flag = "a"
 			
 	### Events ###
 		self.lineentry.returnPressed.connect(self.enter_line)
@@ -170,10 +170,13 @@ Try the different to increase the difficulty as you advance.")
 		self.actionOpen.triggered.connect(self.open_poem)
 		self.actionNew.triggered.connect(self.new_poem)
 		self.startTimeButton.clicked.connect(self.timer)
+		self.actionUse_all.triggered.connect(self.use_all_poems)
+		self.actionUse_learning.triggered.connect(self.use_learning_poems)
 
 	### Functions ###
 	
 	def timer(self):
+		''' starts / restarts timer '''
 		self.refresh_poem()
 		self.poem_buffer = []
 		self.wpmLcd.display(0)
@@ -186,11 +189,13 @@ Try the different to increase the difficulty as you advance.")
 		self.lineentry.setFocus()
 			
 	def get_timer(self):
+		''' Time elapsed since last restart '''
 		current_time = time.time()
 		time_delta = current_time - float(self.timer_var)
 		self.timerLcd.display(time_delta)
 	
 	def get_wpm(self, signal):
+		''' returns the wpm '''
 		poem_line = signal.split(" ")
 		self.poem_buffer.append(poem_line)
 		word_count = 0
@@ -202,6 +207,7 @@ Try the different to increase the difficulty as you advance.")
 		self.wpmLcd.display(self.wpm)
 	
 	def activate_buttons(self, bool):
+		''' buttons only allowed when there is current poem '''
 		self.hide.setEnabled(bool)
 		self.refresh.setEnabled(bool)
 		self.voiceover.setEnabled(bool)
@@ -210,6 +216,15 @@ Try the different to increase the difficulty as you advance.")
 		self.obfuscator.setEnabled(bool)
 		self.startTimeButton.setEnabled(bool)
 	
+	def use_all_poems(self):
+		self.use_which_poems(signal = "a")
+	
+	def use_learning_poems(signal):
+		self.use_which_poems(signal = "l")
+		
+	def use_which_poems(self, signal):
+		self.bookshelf_flag = signal
+			
 	def new_poem(self):
 		''' handler for new poem window '''
 		self.dialog.show()
@@ -217,7 +232,7 @@ Try the different to increase the difficulty as you advance.")
 	def load_metadata(self):
 		''' May be used for 'use all' etc... functionality '''
 		with open('./metadata.txt', 'r') as metas:
-			self.book_status = metas.readlines()
+			return metas.readlines()
 			
 	def memorized_poem(self):
 		''' Set poem metadata to memorized '''
@@ -319,6 +334,7 @@ Try the different to increase the difficulty as you advance.")
 		self.poemdisplay.setText("")
 		self.footer_label.setText("Keep at it, champ")
 		bookshelf = []
+		meta_data = self.load_metadata()
 		for i in os.listdir('./bookshelf'):
 			bookshelf.append(i)
 		if len(bookshelf) > 1:
