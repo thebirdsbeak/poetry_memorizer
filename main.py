@@ -4,6 +4,14 @@ import os
 from subprocess import call
 from random import choice, shuffle
 import mygui
+import newpoem
+
+
+class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_MainWindow):
+	
+	def __init__(self, parent=None):
+		super(NewPoem, self).__init__(parent)
+		self.setupUi(self)
 
 class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 	
@@ -40,6 +48,11 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.poem_progress.valueChanged.connect(self.chicken_dinner)
 		self.fuzzy_match.clicked.connect(self.random_poem)
 		self.actionOpen.triggered.connect(self.open_poem)
+		self.actionUse_all.triggered.connect(self.new_poem)
+		self.dialog = NewPoem(self)
+
+	def new_poem(self):
+		self.dialog.show()
 
 	def load_metadata(self):
 		with open('./metadata.txt', 'r') as metas:
