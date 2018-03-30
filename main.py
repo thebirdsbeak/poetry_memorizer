@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 import sys
 import os
+import time
 from subprocess import call
 from random import choice, shuffle
 import mygui
@@ -27,6 +28,7 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 		self.saveButton.setEnabled(False)
 		self.saveButton.clicked.connect(self.save_poem)
 		self.cancelButton.clicked.connect(self.cancel_new_poem)
+		self.clearButton.clicked.connect(self.clear_new_poem)
 		self.editButton.clicked.connect(self.edit_poem)
 		
 	### Functions ###
@@ -66,7 +68,16 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 			self.saveButton.setEnabled(True)
 		else:
 			self.saveButton.setEnabled(False)
-			
+	
+	def clear_new_poem(self):
+		self.poemInput.setPlainText("")
+		self.authorInput.setText("")
+		self.nameInput.setText("")
+		self.poemStatus.setText("Not saved")
+		self.authorInput.setStyleSheet("background-color:  #ff666b")
+		self.nameInput.setStyleSheet("background-color:  #ff666b")
+		self.poemInput.setStyleSheet("background-color:  #ff666b")
+					
 	def save_poem(self):
 		testname = str(self.nameInput.text().strip().lower())
 		testname = testname.replace(" ", "_")
@@ -127,7 +138,14 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 		self.obfusc_flag = False
 		self.progress_whole = 0
 		self.alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-	
+		self.font_size = 12
+		self.timer_var = float
+		self.final_time = float
+		self.timer_enabled = False
+		self.saveTimeButton.setEnabled(False)
+		self.activate_buttons(False)
+
+			
 	### Events ###
 		self.poemdisplay.setText("Welcome to poetry memorizer!\n\n\
 Open a poem, then enter each line until complete.\n\
@@ -144,12 +162,35 @@ Try the different to increase the difficulty as you advance.")
 		self.hide.clicked.connect(self.toggle_hide)
 		self.obfuscator.sliderReleased.connect(self.obfuscate_poem)
 		self.poem_progress.valueChanged.connect(self.chicken_dinner)
-		self.fuzzy_match.clicked.connect(self.random_poem)
+		self.randomButton.clicked.connect(self.random_poem)
 		self.actionOpen.triggered.connect(self.open_poem)
 		self.actionNew.triggered.connect(self.new_poem)
+		self.startTimeButton.clicked.connect(self.timer)
+#		self.saveTimeButton.clicked.connect(self.get_timer)
 		self.dialog = NewPoem(self)
 
 	### Functions ###
+	
+	def timer(self):
+		self.timerLcd.display(0)
+		self.startTimeButton.setText("Restart")
+		self.timer_enabled = True
+		self.timer_var = time.time()
+		
+	def get_timer(self):
+		current_time = time.time()
+		time_delta = current_time - float(self.timer_var)
+		self.timerLcd.display(time_delta)
+	
+	def activate_buttons(self, bool):
+		self.hide.setEnabled(bool)
+		self.refresh.setEnabled(bool)
+		self.voiceover.setEnabled(bool)
+		self.line_nos.setEnabled(bool)
+		self.display_mode.setEnabled(bool)
+		self.obfuscator.setEnabled(bool)
+		self.startTimeButton.setEnabled(bool)
+	
 	def new_poem(self):
 		''' handler for new poem window '''
 		self.dialog.show()
@@ -204,27 +245,34 @@ Try the different to increase the difficulty as you advance.")
 		'''Tests line against first line in current_poem'''
 		global current_poem
 		global obfuscated_poem
-		entered_text = str(self.lineentry.text())
-		if str(current_poem[0][1].strip()) == "":
-			del current_poem[0]
-		if self.obfusc_flag == False:
-			if entered_text == str(current_poem[0][1].strip()):
-				del current_poem[0]
-				current_progress = len(current_poem)
-				progress = int(((self.progress_whole - current_progress)/self.progress_whole) * 100)
-				self.poem_progress.setProperty("value", progress)
-				self.poemdisplay.setText("")
-				self.lineentry.setText("")
-				self.print_current_poem()
+		if self.lineentry.text() == "":
+			return
+		elif len(current_poem) == 0:
+			return
 		else:
-			if entered_text == str(obfuscated_poem[0][1].strip()):
+			if self.timer_enabled == True:
+				self.get_timer()
+			entered_text = str(self.lineentry.text())
+			if str(current_poem[0][1].strip()) == "":
 				del current_poem[0]
-				current_progress = len(current_poem)
-				progress = int(((self.progress_whole - current_progress)/self.progress_whole) * 100)
-				self.poem_progress.setProperty("value", progress)
-				self.poemdisplay.setText("")
-				self.lineentry.setText("")
-				self.print_current_poem()
+			if self.obfusc_flag == False:
+				if entered_text == str(current_poem[0][1].strip()):
+					del current_poem[0]
+					current_progress = len(current_poem)
+					progress = int(((self.progress_whole - current_progress)/self.progress_whole) * 100)
+					self.poem_progress.setProperty("value", progress)
+					self.poemdisplay.setText("")
+					self.lineentry.setText("")
+					self.print_current_poem()
+			else:
+				if entered_text == str(obfuscated_poem[0][1].strip()):
+					del current_poem[0]
+					current_progress = len(current_poem)
+					progress = int(((self.progress_whole - current_progress)/self.progress_whole) * 100)
+					self.poem_progress.setProperty("value", progress)
+					self.poemdisplay.setText("")
+					self.lineentry.setText("")
+					self.print_current_poem()
 	
 	def open_poem(self):
 		''' Load a poem from file explorer '''
@@ -372,7 +420,7 @@ Try the different to increase the difficulty as you advance.")
 		''' Prints the current poem on screen '''
 		global current_poem
 		self.poemdisplay.setText("")
-		
+		self.activate_buttons(True)		
 		if self.hide_text == True:
 			for i in current_poem:
 				first_string = ""
@@ -420,6 +468,10 @@ Try the different to increase the difficulty as you advance.")
 	def chicken_dinner(self):
 		''' Triggers events on completion of poem entry '''
 		if self.poem_progress.value() == 100:
+			self.final_time = time.time() - self.timer_var
+			self.timerLcd.display(self.final_time)
+			self.saveTimeButton.setEnabled(True)
+			self.timer_enabled = False
 			self.footer_label.setText("Well done! Refresh to go again.")
 
 	### Launch ###

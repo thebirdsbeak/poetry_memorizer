@@ -89,6 +89,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="clearButton">
+       <property name="text">
+        <string>Clear All</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="editButton">
        <property name="text">
         <string>Open / Edit Poem</string>

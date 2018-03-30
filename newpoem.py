@@ -54,6 +54,9 @@ class Ui_mainWindow(object):
         self.cancelButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.cancelButton.setObjectName("cancelButton")
         self.horizontalLayout.addWidget(self.cancelButton)
+        self.clearButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.clearButton.setObjectName("clearButton")
+        self.horizontalLayout.addWidget(self.clearButton)
         self.editButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.editButton.setObjectName("editButton")
         self.horizontalLayout.addWidget(self.editButton)
@@ -79,6 +82,7 @@ class Ui_mainWindow(object):
         self.authorName.setText(_translate("mainWindow", "Author"))
         self.poemStatus.setText(_translate("mainWindow", "Not  Saved"))
         self.cancelButton.setText(_translate("mainWindow", "Cancel"))
+        self.clearButton.setText(_translate("mainWindow", "Clear All"))
         self.editButton.setText(_translate("mainWindow", "Open / Edit Poem"))
         self.saveButton.setText(_translate("mainWindow", "Save"))
 
