@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 import sys
 import os
 from subprocess import call
@@ -22,6 +23,8 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_MainWindow):
 		self.authorInput.textEdited.connect(self.author_name_input)
 		self.poemInput.textChanged.connect(self.poem_text_input)
 		self.saveButton.setEnabled(False)
+		self.saveButton.clicked.connect(self.save_poem)
+		self.cancelButton.clicked.connect(self.cancel_new_poem)
 		
 	def poem_name_input(self):
 		''' Triggers styling for poem name '''
@@ -61,8 +64,29 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_MainWindow):
 			self.saveButton.setEnabled(False)
 			
 	def save_poem(self):
-		return
-
+		testname = str(self.nameInput.text().strip().lower())
+		testname = testname.replace(" ", "_")
+		testauthor = str(self.authorInput.text().strip().lower())
+		testauthor = testauthor.replace(" ", "_")
+		text_to_save = str(self.poemInput.toPlainText())
+		file_name = "{}-{}.txt".format(testname, testauthor)
+		save_name = "./bookshelf/{}".format(file_name)
+		try:
+			with open(save_name, "x") as save_me:
+				save_me.write(text_to_save)
+			self.poemStatus.setText("Saved {}".format(file_name))
+			
+		except FileExistsError:
+			msg = QMessageBox
+			overwrite = msg.question(self, 'File exists', "Overwrite poem?", QMessageBox.Yes | QMessageBox.No)
+			if overwrite == QMessageBox.Yes:
+				with open(save_name, "w") as save_me:
+					save_me.write(text_to_save)
+				self.poemStatus.setText("Saved {}".format(file_name))
+	
+	def cancel_new_poem(self):
+		self.hide()
+			
 class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 	
 	current_poem = []
