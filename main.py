@@ -16,20 +16,25 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_MainWindow):
 		self.nameInput.setStyleSheet("background-color:  #ff666b")
 		self.authorInput.setStyleSheet("background-color:  #ff666b")
 		self.poemInput.setStyleSheet("background-color:  #ff666b")
-			
+	
 	### Events ###	
 		self.nameInput.textEdited.connect(self.poem_name_input)
 		self.authorInput.textEdited.connect(self.author_name_input)
 		self.poemInput.textChanged.connect(self.poem_text_input)
+		self.saveButton.setEnabled(False)
 		
 	def poem_name_input(self):
+		''' Triggers styling for poem name '''
 		entered_text = str(self.nameInput.text())
+		self.test_for_save()
 		if entered_text == "":
 			self.nameInput.setStyleSheet("background-color:  #ff666b")
 		else:
 			self.nameInput.setStyleSheet("background-color: #99ff99")
 			
 	def author_name_input(self):
+		self.test_for_save()
+		''' Triggers styling for author name '''
 		entered_text = str(self.authorInput.text())
 		if entered_text == "":
 			self.authorInput.setStyleSheet("background-color:  #ff666b")
@@ -37,14 +42,26 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_MainWindow):
 			self.authorInput.setStyleSheet("background-color: #99ff99")
 
 	def poem_text_input(self):
+		self.test_for_save()
+		''' Triggers styling for poem text '''
 		entered_text = str(self.poemInput.toPlainText())
 		if entered_text == "":
 			self.poemInput.setStyleSheet("background-color:  #ff666b")
 		else:
 			self.poemInput.setStyleSheet("background-color: #99ff99")
 
-	def test_for_save():
-		if 
+	def test_for_save(self):
+		''' If all new poems inputs are > 0, save button is active'''
+		testname = str(self.nameInput.text())
+		testauthor = str(self.authorInput.text())
+		testtext = str(self.poemInput.toPlainText())
+		if testname != "" and testauthor != "" and testtext != "":
+			self.saveButton.setEnabled(True)
+		else:
+			self.saveButton.setEnabled(False)
+			
+	def save_poem(self):
+		return
 
 class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 	
