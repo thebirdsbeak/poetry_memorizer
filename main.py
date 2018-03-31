@@ -141,7 +141,7 @@ Try the different to increase the difficulty as you advance.")
 		self.hide_text = False
 		self.obfusc_flag = False
 		self.progress_whole = 0
-		self.alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+		self.alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 		self.font_size = 12
 		self.timer_var = float
 		self.final_time = float
