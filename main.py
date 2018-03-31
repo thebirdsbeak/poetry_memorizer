@@ -369,7 +369,7 @@ Try the different to increase the difficulty as you advance.")
 	def update_name(self, new_name):
 		'''updates the name of the poem'''
 		global poem_name
-		poem_name = new_name.replace("_", " ").replace(".txt", "")
+		poem_name = new_name.replace("_", " ").replace(".txt", "").replace("-", " - ")
 		self.poemname.setText(poem_name.title())
 		poem_name = new_name
 		
