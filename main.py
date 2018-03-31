@@ -180,7 +180,7 @@ Try the different to increase the difficulty as you advance.")
 		self.startTimeButton.clicked.connect(self.timer)
 		self.actionUse_all.triggered.connect(self.use_all_poems)
 		self.actionUse_learning.triggered.connect(self.use_learning_poems)
-#		self.actionView_bookshelf.triggered.connect(self.view_bookshelf)
+		self.actionView_bookshelf.triggered.connect(self.view_bookshelf)
 
 
 	### Functions ###
