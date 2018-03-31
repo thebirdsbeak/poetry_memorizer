@@ -153,7 +153,6 @@ Try the different to increase the difficulty as you advance.")
 		self.timer_var = float
 		self.final_time = float
 		self.timer_enabled = False
-		self.saveTimeButton.setEnabled(False)
 		self.actionUse_all.setEnabled(False)
 		self.activate_buttons(False)
 		self.dialog = NewPoem(self)
@@ -198,7 +197,6 @@ Try the different to increase the difficulty as you advance.")
 		self.timerLcd.display(0)
 		self.startTimeButton.setText("Restart")
 		self.timer_enabled = True
-		self.saveTimeButton.setEnabled(False)
 		self.startTimeButton.setStyleSheet("background-color: #99ff99")
 		self.timer_var = time.time()
 		self.lineentry.setFocus()
