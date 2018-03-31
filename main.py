@@ -7,8 +7,16 @@ from subprocess import call
 from random import choice, shuffle
 import mygui
 import newpoem
+import viewbookshelf
 
-edit_status = False
+class BookShelfViewer(QtWidgets.QMainWindow, viewbookshelf.Ui_MainWindow):
+	
+	### Setup ###
+	
+	def __init__(self, parent=mygui.Ui_MainWindow):
+		''' initaliser for bookshelf view '''
+		super(BookShelfViewer, self).__init__(parent)
+		self.setupUi(self)
 
 class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 	
@@ -16,7 +24,6 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 	def __init__(self, parent=mygui.Ui_MainWindow):
 		''' Initialiser for new poem window '''
 		super(NewPoem, self).__init__(parent)
-		self.setWindowIcon(QtGui.QIcon('leon.ico'))
 		self.setupUi(self)
 		self.nameInput.setStyleSheet("background-color:  #ff666b")
 		self.authorInput.setStyleSheet("background-color:  #ff666b")
@@ -44,8 +51,8 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 			self.nameInput.setStyleSheet("background-color: #99ff99")
 			
 	def author_name_input(self):
-		self.test_for_save()
 		''' Triggers styling for author name '''
+		self.test_for_save()
 		entered_text = str(self.authorInput.text())
 		if entered_text == "":
 			self.authorInput.setStyleSheet("background-color:  #ff666b")
@@ -53,8 +60,8 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 			self.authorInput.setStyleSheet("background-color: #99ff99")
 
 	def poem_text_input(self):
-		self.test_for_save()
 		''' Triggers styling for poem text '''
+		self.test_for_save()
 		entered_text = str(self.poemInput.toPlainText())
 		if entered_text == "":
 			self.poemInput.setStyleSheet("background-color:  #ff666b")
@@ -150,6 +157,7 @@ Try the different to increase the difficulty as you advance.")
 		self.actionUse_all.setEnabled(False)
 		self.activate_buttons(False)
 		self.dialog = NewPoem(self)
+		self.books = BookShelfViewer(self)
 		self.wpm = float
 		self.poem_buffer = []
 		self.bookshelf_flag = "a"
@@ -173,8 +181,14 @@ Try the different to increase the difficulty as you advance.")
 		self.startTimeButton.clicked.connect(self.timer)
 		self.actionUse_all.triggered.connect(self.use_all_poems)
 		self.actionUse_learning.triggered.connect(self.use_learning_poems)
+#		self.actionView_bookshelf.triggered.connect(self.view_bookshelf)
+
 
 	### Functions ###
+	
+	def view_bookshelf(self):
+		''' Opens bookshelf dialogue '''
+		self.books.show()
 	
 	def timer(self):
 		''' starts / restarts timer '''
