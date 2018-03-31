@@ -147,6 +147,7 @@ Try the different to increase the difficulty as you advance.")
 		self.final_time = float
 		self.timer_enabled = False
 		self.saveTimeButton.setEnabled(False)
+		self.actionUse_all.setEnabled(False)
 		self.activate_buttons(False)
 		self.dialog = NewPoem(self)
 		self.wpm = float
@@ -218,10 +219,14 @@ Try the different to increase the difficulty as you advance.")
 	
 	def use_all_poems(self):
 		self.use_which_poems(signal = "a")
+		self.actionUse_all.setEnabled(False)
+		self.actionUse_learning.setEnabled(True)
 	
-	def use_learning_poems(signal):
+	def use_learning_poems(self, signal):
 		self.use_which_poems(signal = "l")
-		
+		self.actionUse_learning.setEnabled(False)
+		self.actionUse_all.setEnabled(True)
+				
 	def use_which_poems(self, signal):
 		self.bookshelf_flag = signal
 			
@@ -333,21 +338,34 @@ Try the different to increase the difficulty as you advance.")
 		self.poem_progress.setProperty("value", 0)
 		self.poemdisplay.setText("")
 		self.footer_label.setText("Keep at it, champ")
-		bookshelf = []
 		meta_data = self.load_metadata()
-		for i in os.listdir('./bookshelf'):
-			bookshelf.append(i)
-		if len(bookshelf) > 1:
-			selected = choice(bookshelf)
-			poem = "./{}/{}".format("/bookshelf", selected)
-			self.update_name(selected)
-			with open(poem, "r") as page:
+		if self.bookshelf_flag == "a":
+			bookshelf = []
+			for i in meta_data:
+				if i.split(";")[1] != "x\n":					
+					bookshelf.append(i.split(';'))
+			chosen_poem = choice(bookshelf)
+			with open("./bookshelf/" + str(chosen_poem[0]), "r") as page:
+				self.update_name(chosen_poem[0])
 				raw_poem = page.readlines()
 				for index, i in enumerate(raw_poem):
 					current_poem.append([index, i])
 				self.progress_whole = len(current_poem)
 			self.print_current_poem()
-				
+		else:
+			learning_choice = []
+			for i in meta_data:
+				if i.split(';')[1] == "l\n":
+					learning_choice.append(i.split(';'))
+			chosen_poem = choice(learning_choice)
+			self.update_name(chosen_poem[0])
+			with open("./bookshelf/" + str(chosen_poem[0]), "r") as page:
+				raw_poem = page.readlines()
+				for index, i in enumerate(raw_poem):
+					current_poem.append([index, i])
+				self.progress_whole = len(current_poem)
+			self.print_current_poem()
+			
 	def update_name(self, new_name):
 		'''updates the name of the poem'''
 		global poem_name
