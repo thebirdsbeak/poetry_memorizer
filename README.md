@@ -10,15 +10,18 @@ Current features:
 * Hide the current line of the text
 * Hide entire text
 * Randomly obfuscate words (scale of 1 - 5)
+* Tag poems to randomly select from 'learning' and 'all'
+* Poem timer and wpm counter
+* Add new poems and edit existing
 
 In progress:
 
-* Select random poem based on status (learning, memorised, all)
-* The ability to edit existing poem
+* Save best times
+* View list of learning / memorized
 
 Potential future additions:
 
-* Automatic line entry
+* Automatic line entry (word by word)
 * Command line interface
 * Importing poem files
 * Preferences such as font size
