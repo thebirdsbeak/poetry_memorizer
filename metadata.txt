@@ -1,11 +1,14 @@
 the_jabberwocky-lewis_carroll.txt;m
 fallen_majesty-w_b_yeats.txt;u
 she_walks_in_beauty-lord_byron.txt;l
-address_to_a_haggis-robert_burns.txt;l
+address_to_a_haggis-robert_burns.txt;x
 test-craig_mcintyre.txt;m
-the_tyger-william_blake.txt;l
-maid_quiet-w_b_yeats.txt;l
+the_tyger-william_blake.txt;u
+maid_quiet-w_b_yeats.txt;u
 the_flea-john_donne.txt;l
 lovers_infiniteness-john_donne.txt;l
 to_a_mouse-robert-burns.txt;l
 the_raven-e_a_poe.txt;l
+happy_the_man-john_dryden.txt;m
+the_walrus_and_the_carpenter-lewis_carroll.txt;l
+the_charge_of_the_light_brigade-a_l_tennyson.txt;l
