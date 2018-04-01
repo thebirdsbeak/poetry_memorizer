@@ -1,3 +1,10 @@
+# To do:
+
+# Clear bookshelf on refresh
+# Add setenabled logic to 'use all' etc
+# Set metadata on adding new poem
+# Make sure metadata.txt picks up new files
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 import sys
@@ -17,15 +24,28 @@ class BookShelfViewer(QtWidgets.QMainWindow, viewbookshelf.Ui_MainWindow):
 		''' initaliser for bookshelf view '''
 		super(BookShelfViewer, self).__init__(parent)
 		self.setupUi(self)
-		self.load_info()
 		
 		### Events ###
-		self.pushButton.clicked.connect(self.close_bookshelf)
-#		self.refreshBurron.clicked.connect(self.load_info)
+		self.closeButton.clicked.connect(self.close_bookshelf)
+		self.refreshButton.clicked.connect(self.load_info)
 
 	def load_info(self):
 		with open("metadata.txt", "r") as meta_file:
 			meta_contents = meta_file.readlines()
+			for i in meta_contents:
+				meta_datum = i.split(';')
+				meta_tag = meta_datum[1]
+				display_name = meta_datum[0].title()
+				clean_name = display_name.replace("_", " ").replace("-", " - ").replace(".Txt", "")
+				if meta_tag == "l\n":
+					self.learningBrowser.append(clean_name)
+				elif meta_tag == "m\n":
+					self.memorizedBrowser.append(clean_name)
+				elif meta_tag == "x\n":
+					self.ignoreBrowser.append(clean_name)
+				else:
+					self.unmarkedBrowser.append(clean_name)
+				
 	
 	def close_bookshelf(self):
 		self.hide()
@@ -180,6 +200,7 @@ Try the different to increase the difficulty as you advance.")
 		self.actionMove_to_memorised.triggered.connect(self.memorized_poem)
 		self.actionMove_to_learning.triggered.connect(self.learn_poem)
 		self.actionNever_learn.triggered.connect(self.ignore_poem)
+		self.actionUntag.triggered.connect(self.untag_poem)
 		self.refresh.clicked.connect(self.refresh_poem)
 		self.voiceover.clicked.connect(self.voice_over)
 		self.line_nos.clicked.connect(self.toggle_line_nos)
@@ -194,7 +215,6 @@ Try the different to increase the difficulty as you advance.")
 		self.actionUse_all.triggered.connect(self.use_all_poems)
 		self.actionUse_learning.triggered.connect(self.use_learning_poems)
 		self.actionView_bookshelf.triggered.connect(self.view_bookshelf)
-
 
 	### Functions ###
 	
@@ -275,6 +295,10 @@ Try the different to increase the difficulty as you advance.")
 	def ignore_poem(self):
 		''' Set poem metadata to ignore '''
 		self.amend_book_info("x")
+
+	def untag_poem(self):
+		''' Untag poem '''
+		self.amend_book_info("u")
 			
 	def amend_book_info(self, signal):
 		''' Takes relevant signal and sets books meta status'''
@@ -292,6 +316,8 @@ Try the different to increase the difficulty as you advance.")
 							meta_parsed = "{};{}".format(poem_name, "l\n")
 						elif signal == "x":
 							meta_parsed = "{};{}".format(poem_name, "x\n")
+						elif signal == "u":
+							meta_parsed = "{};{}".format(poem_name, "u\n")
 						else:
 							return
 					else:
