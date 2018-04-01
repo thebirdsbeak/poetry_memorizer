@@ -17,6 +17,19 @@ class BookShelfViewer(QtWidgets.QMainWindow, viewbookshelf.Ui_MainWindow):
 		''' initaliser for bookshelf view '''
 		super(BookShelfViewer, self).__init__(parent)
 		self.setupUi(self)
+		self.load_info()
+		
+		### Events ###
+		self.pushButton.clicked.connect(self.close_bookshelf)
+#		self.refreshBurron.clicked.connect(self.load_info)
+
+	def load_info(self):
+		with open("metadata.txt", "r") as meta_file:
+			meta_contents = meta_file.readlines()
+	
+	def close_bookshelf(self):
+		self.hide()
+		
 
 class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 	
