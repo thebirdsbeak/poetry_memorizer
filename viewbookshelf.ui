@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Bookshelf</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="gridLayoutWidget">
@@ -45,10 +45,10 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QTextBrowser" name="textBrowser"/>
+      <widget class="QTextBrowser" name="memorizedBrowser"/>
      </item>
      <item row="1" column="1">
-      <widget class="QTextBrowser" name="textBrowser_2"/>
+      <widget class="QTextBrowser" name="learningBrowser"/>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="memorizedLabel">
@@ -71,20 +71,20 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QTextBrowser" name="textBrowser_4"/>
+      <widget class="QTextBrowser" name="ignoredBrowser"/>
      </item>
      <item row="3" column="0">
-      <widget class="QTextBrowser" name="textBrowser_3"/>
+      <widget class="QTextBrowser" name="unmarkedBrowser"/>
      </item>
      <item row="4" column="0" colspan="2">
       <layout class="QHBoxLayout" name="horizontalLayout_4"/>
      </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="closeButton">
     <property name="geometry">
      <rect>
-      <x>360</x>
+      <x>310</x>
       <y>470</y>
       <width>92</width>
       <height>36</height>
@@ -94,8 +94,22 @@
      <string>Close</string>
     </property>
    </widget>
-   <zorder>pushButton</zorder>
+   <widget class="QPushButton" name="refreshButton">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>470</y>
+      <width>90</width>
+      <height>36</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Refresh</string>
+    </property>
+   </widget>
+   <zorder>closeButton</zorder>
    <zorder>gridLayoutWidget</zorder>
+   <zorder>refreshButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
