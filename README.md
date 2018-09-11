@@ -17,11 +17,9 @@ Current features:
 In progress:
 
 * Save best times
-* View list of learning / memorized
 
 Potential future additions:
 
-* Automatic line entry (word by word)
 * Command line interface
-* Importing poem files
+* Easily importing poem files
 * Preferences such as font size
