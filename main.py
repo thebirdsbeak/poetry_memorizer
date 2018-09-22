@@ -179,9 +179,23 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
         self.poemdisplay.setStyleSheet("font-size: 14px")
 
     ### Settings ###
-        self.poemdisplay.setText("Welcome to poetry memorizer!\n\n\
+        self.poemdisplay.setText("""Welcome to poetry memorizer!\n\n\
 Open a poem, then enter each line until complete.\n\
-Try the different toggles to increase the difficulty as you advance.")
+Try the different toggles to increase the difficulty as you advance.\n
+
+Hotkeys:
+
+Ctrl T  - Start / restart timer
+Ctrl R  - Random Poem
+Ctrl O  - Open Poem from file
+Ctrl N  - New / Edit poem
+Ctrl +  - Increase font size
+Ctrl -  - Decrease font size
+Ctrl h  - Speak line aloud
+Esc     - Close poetry memorizer
+
+
+""")
         self.line_numbers = False
         self.display_toggle = False
         self.hide_text = False
@@ -224,6 +238,34 @@ Try the different toggles to increase the difficulty as you advance.")
         self.actionView_bookshelf.triggered.connect(self.view_bookshelf)
         self.action_Fontminus.triggered.connect(self.decrease_font)
         self.action_Fontplus.triggered.connect(self.increase_font)
+
+
+    ### Key Press Events """
+
+    def keyPressEvent(self, e):
+        global current_poem
+        if e.key() == QtCore.Qt.Key_Escape:
+            self.close()
+        elif e.key() == QtCore.Qt.Key_R:
+            self.random_poem()
+        elif e.key() == QtCore.Qt.Key_N:
+            self.new_poem()
+        elif e.key() == QtCore.Qt.Key_O:
+            self.open_poem()
+        elif e.key() == QtCore.Qt.Key_H:
+            try:
+               self.voice_over()
+            except NameError:
+                print("load a poem first")
+        elif e.key() == QtCore.Qt.Key_Plus:
+            self.increase_font()
+        elif e.key() == QtCore.Qt.Key_Minus:
+            self.decrease_font()
+        elif e.key() == QtCore.Qt.Key_T:
+            try:
+               self.timer()
+            except NameError:
+                print("load a poem first")
 
 
     ### Functions ###
@@ -550,12 +592,12 @@ Try the different toggles to increase the difficulty as you advance.")
     def toggle_display_mode(self):
         ''' Toggles line by line display mode '''
         if self.display_toggle == True:
-            self.display_mode.setText("Line by line")
+            self.display_mode.setText("Hide line")
             self.display_toggle = False
             self.print_current_poem()
         else:
             self.display_toggle = True
-            self.display_mode.setText("Rote")
+            self.display_mode.setText("Show line")
             self.print_current_poem()
 
     def toggle_hide(self):
@@ -571,6 +613,7 @@ Try the different toggles to increase the difficulty as you advance.")
 
     def print_current_poem(self):
         ''' Prints the current poem on screen '''
+        self.lineentry.setFocus()
         global current_poem
         self.poemdisplay.setText("")
         self.activate_buttons(True)
@@ -626,7 +669,7 @@ Try the different toggles to increase the difficulty as you advance.")
                 self.timerLcd.display(self.final_time)
             self.startTimeButton.setStyleSheet("background-color:")
             self.timer_enabled = False
-            self.footer_label.setText("Well done! Refresh to go again.")
+            self.footer_label.setText("Well done! Restart to go again.")
 
     ### Launch ###
 app = QtWidgets.QApplication(sys.argv)

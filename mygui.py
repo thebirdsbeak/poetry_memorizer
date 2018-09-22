@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(793, 661)
+        MainWindow.resize(839, 649)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -108,7 +108,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addLayout(self.verticalLayout_2, 1, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 793, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 839, 20))
         self.menubar.setObjectName("menubar")
         self.menuLexpad = QtWidgets.QMenu(self.menubar)
         self.menuLexpad.setObjectName("menuLexpad")
@@ -188,7 +188,7 @@ class Ui_MainWindow(object):
         self.hide.setText(_translate("MainWindow", "Hide"))
         self.line_nos.setText(_translate("MainWindow", "Line Nos"))
         self.voiceover.setText(_translate("MainWindow", "Read Line"))
-        self.refresh.setText(_translate("MainWindow", "Refresh"))
+        self.refresh.setText(_translate("MainWindow", "Restart"))
         self.randomButton.setText(_translate("MainWindow", "Random"))
         self.startTimeButton.setText(_translate("MainWindow", "Start Timer"))
         self.missing_label.setText(_translate("MainWindow", "Obfuscate"))
@@ -202,11 +202,11 @@ class Ui_MainWindow(object):
         self.actionMove_to_learning.setText(_translate("MainWindow", "Tag as learning"))
         self.actionMove_to_memorised.setText(_translate("MainWindow", "Tag as memorized"))
         self.actionNever_learn.setText(_translate("MainWindow", "Tag as ignore"))
-        self.actionOpen.setText(_translate("MainWindow", "Open"))
-        self.actionRandom.setText(_translate("MainWindow", "Random"))
+        self.actionOpen.setText(_translate("MainWindow", "Open (ctrl o)"))
+        self.actionRandom.setText(_translate("MainWindow", "Random (ctrl r)"))
         self.actionUse_all.setText(_translate("MainWindow", "Use all"))
         self.actionUse_learning.setText(_translate("MainWindow", "Use learning"))
-        self.actionNew.setText(_translate("MainWindow", "New / Edit"))
+        self.actionNew.setText(_translate("MainWindow", "New / Edit (ctrl n)"))
         self.actionEdit.setText(_translate("MainWindow", "Edit"))
         self.actionFontIncrease.setText(_translate("MainWindow", "Font +"))
         self.actionFontDecrease.setText(_translate("MainWindow", "Font -"))
@@ -215,8 +215,8 @@ class Ui_MainWindow(object):
         self.actionUse_learning_2.setText(_translate("MainWindow", "Use learning"))
         self.actionUse_memorized.setText(_translate("MainWindow", "Use memorized"))
         self.actionUntag.setText(_translate("MainWindow", "Untag"))
-        self.action_Fontplus.setText(_translate("MainWindow", "Increase font"))
-        self.action_Fontminus.setText(_translate("MainWindow", "Decrease  font"))
+        self.action_Fontplus.setText(_translate("MainWindow", "Increase font (ctrl +)"))
+        self.action_Fontminus.setText(_translate("MainWindow", "Decrease  font (ctrl -)"))
 
 
 if __name__ == "__main__":

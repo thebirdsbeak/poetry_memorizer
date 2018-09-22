@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>793</width>
-    <height>661</height>
+    <width>839</width>
+    <height>649</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -125,7 +125,7 @@
         <item row="2" column="2">
          <widget class="QPushButton" name="refresh">
           <property name="text">
-           <string>Refresh</string>
+           <string>Restart</string>
           </property>
          </widget>
         </item>
@@ -227,7 +227,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>793</width>
+     <width>839</width>
      <height>20</height>
     </rect>
    </property>
@@ -287,12 +287,12 @@
   </action>
   <action name="actionOpen">
    <property name="text">
-    <string>Open</string>
+    <string>Open (ctrl o)</string>
    </property>
   </action>
   <action name="actionRandom">
    <property name="text">
-    <string>Random</string>
+    <string>Random (ctrl r)</string>
    </property>
   </action>
   <action name="actionUse_all">
@@ -307,7 +307,7 @@
   </action>
   <action name="actionNew">
    <property name="text">
-    <string>New / Edit</string>
+    <string>New / Edit (ctrl n)</string>
    </property>
   </action>
   <action name="actionEdit">
@@ -352,12 +352,12 @@
   </action>
   <action name="action_Fontplus">
    <property name="text">
-    <string>Increase font</string>
+    <string>Increase font (ctrl +)</string>
    </property>
   </action>
   <action name="action_Fontminus">
    <property name="text">
-    <string>Decrease  font</string>
+    <string>Decrease  font (ctrl -)</string>
    </property>
   </action>
  </widget>
