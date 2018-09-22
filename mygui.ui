@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>793</width>
+    <height>661</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Poetry Memorizer</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QTextBrowser" name="poemdisplay"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineentry"/>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="poemname">
+        <property name="text">
+         <string>No Poem Loaded</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout"/>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <item row="1" column="3">
+         <widget class="QPushButton" name="display_mode">
+          <property name="text">
+           <string>Line by Line</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="8">
+         <widget class="QProgressBar" name="poem_progress">
+          <property name="value">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="8">
+         <widget class="QLabel" name="progess_label">
+          <property name="text">
+           <string>Progress</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QPushButton" name="hide">
+          <property name="text">
+           <string>Hide</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QPushButton" name="line_nos">
+          <property name="text">
+           <string>Line Nos</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QPushButton" name="voiceover">
+          <property name="text">
+           <string>Read Line</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QSlider" name="obfuscator">
+          <property name="maximum">
+           <number>5</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="tickPosition">
+           <enum>QSlider::TicksBothSides</enum>
+          </property>
+          <property name="tickInterval">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QLCDNumber" name="wpmLcd"/>
+        </item>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="refresh">
+          <property name="text">
+           <string>Refresh</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4">
+         <widget class="QLCDNumber" name="timerLcd"/>
+        </item>
+        <item row="2" column="4">
+         <widget class="QPushButton" name="randomButton">
+          <property name="text">
+           <string>Random</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="3">
+         <widget class="QPushButton" name="startTimeButton">
+          <property name="text">
+           <string>Start Timer</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="missing_label">
+          <property name="text">
+           <string>Obfuscate</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="wpmLabel">
+          <property name="text">
+           <string>WPM</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="8">
+         <widget class="QLabel" name="timerLabel">
+          <property name="text">
+           <string>Time</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="2" column="2">
+         <widget class="QLabel" name="footer_label">
+          <property name="text">
+           <string>(c) thebirdsbeak.com</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignHCenter|Qt::AlignTop</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>793</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuLexpad">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="menuNew_poem">
+     <property name="title">
+      <string>New poem</string>
+     </property>
+     <addaction name="actionOpen"/>
+     <addaction name="actionRandom"/>
+     <addaction name="actionNew"/>
+    </widget>
+    <addaction name="menuNew_poem"/>
+    <addaction name="actionMove_to_learning"/>
+    <addaction name="actionMove_to_memorised"/>
+    <addaction name="actionNever_learn"/>
+    <addaction name="actionUntag"/>
+   </widget>
+   <widget class="QMenu" name="menuBookshelf">
+    <property name="title">
+     <string>Bookshelf</string>
+    </property>
+    <addaction name="actionView_bookshelf"/>
+    <addaction name="actionUse_all_2"/>
+    <addaction name="actionUse_learning_2"/>
+    <addaction name="actionUse_memorized"/>
+   </widget>
+   <addaction name="menuLexpad"/>
+   <addaction name="menuBookshelf"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionMove_to_learning">
+   <property name="text">
+    <string>Tag as learning</string>
+   </property>
+  </action>
+  <action name="actionMove_to_memorised">
+   <property name="text">
+    <string>Tag as memorized</string>
+   </property>
+  </action>
+  <action name="actionNever_learn">
+   <property name="text">
+    <string>Tag as ignore</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionRandom">
+   <property name="text">
+    <string>Random</string>
+   </property>
+  </action>
+  <action name="actionUse_all">
+   <property name="text">
+    <string>Use all</string>
+   </property>
+  </action>
+  <action name="actionUse_learning">
+   <property name="text">
+    <string>Use learning</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New / Edit</string>
+   </property>
+  </action>
+  <action name="actionEdit">
+   <property name="text">
+    <string>Edit</string>
+   </property>
+  </action>
+  <action name="actionFontIncrease">
+   <property name="text">
+    <string>Font +</string>
+   </property>
+  </action>
+  <action name="actionFontDecrease">
+   <property name="text">
+    <string>Font -</string>
+   </property>
+  </action>
+  <action name="actionView_bookshelf">
+   <property name="text">
+    <string>View bookshelf</string>
+   </property>
+  </action>
+  <action name="actionUse_all_2">
+   <property name="text">
+    <string>Use all</string>
+   </property>
+  </action>
+  <action name="actionUse_learning_2">
+   <property name="text">
+    <string>Use learning</string>
+   </property>
+  </action>
+  <action name="actionUse_memorized">
+   <property name="text">
+    <string>Use memorized</string>
+   </property>
+  </action>
+  <action name="actionUntag">
+   <property name="text">
+    <string>Untag</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
