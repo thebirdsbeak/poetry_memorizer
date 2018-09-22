@@ -157,7 +157,7 @@
          </widget>
         </item>
         <item row="3" column="0">
-         <spacer name="horizontalSpacer_2">
+         <spacer name="stanzaLabel">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -186,6 +186,25 @@
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QSpinBox" name="spinBoxStart"/>
+        </item>
+        <item row="3" column="4">
+         <widget class="QSpinBox" name="spinBoxEnd"/>
+        </item>
+        <item row="3" column="3">
+         <widget class="QLabel" name="label">
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>&lt; Stanzas &gt;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>

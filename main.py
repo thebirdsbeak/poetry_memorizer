@@ -217,6 +217,7 @@ Esc     - Close poetry memorizer
         self.wpm = float
         self.poem_buffer = []
         self.bookshelf_flag = "a"
+        self.stanza_tracker = []
 
     ### Events ###
         self.lineentry.returnPressed.connect(self.enter_line)
@@ -242,6 +243,8 @@ Esc     - Close poetry memorizer
         self.actionView_bookshelf.triggered.connect(self.view_bookshelf)
         self.action_Fontminus.triggered.connect(self.decrease_font)
         self.action_Fontplus.triggered.connect(self.increase_font)
+        self.spinBoxStart.valueChanged.connect(self.stanza_start)
+        self.spinBoxEnd.valueChanged.connect(self.stanza_end)
 
 
     def keyPressEvent(self, e):
@@ -642,12 +645,34 @@ Esc     - Close poetry memorizer
             self.print_current_poem()
 
 
+    def stanza_start(self):
+        self.spinBoxEnd.setMinimum(self.spinBoxStart.value())
+        self.stanza_tracker = [self.spinBoxStart.value(), self.spinBoxEnd.value()]
+
+
+    def stanza_end(self):
+        self.stanza_tracker = [self.spinBoxStart.value(), self.spinBoxEnd.value()]
+
+
     def print_current_poem(self):
         ''' Prints the current poem on screen '''
         self.lineentry.setFocus()
         global current_poem
         self.poemdisplay.setText("")
         self.activate_buttons(True)
+
+        poem_string = ""
+        for i in current_poem:
+            poem_string += i[1]
+        stanzas = poem_string.split("\n\n")
+        numstanzas = len(stanzas)
+
+        self.spinBoxEnd.setMaximum(numstanzas)
+        self.spinBoxEnd.setMinimum(1)
+        self.spinBoxEnd.setValue(numstanzas)
+        self.spinBoxStart.setMaximum(numstanzas)
+        self.spinBoxStart.setMinimum(1)
+
         if self.hide_text == True:
             for i in current_poem:
                 first_string = ""
