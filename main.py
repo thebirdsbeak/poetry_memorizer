@@ -12,13 +12,11 @@ import viewbookshelf
 class BookShelfViewer(QtWidgets.QMainWindow, viewbookshelf.Ui_MainWindow):
 
     ### Setup ###
-
     def __init__(self, parent=mygui.Ui_MainWindow):
         ''' initaliser for bookshelf view '''
         super(BookShelfViewer, self).__init__(parent)
         self.setupUi(self)
         self.load_info()
-
 
         ### Events ###
         self.closeButton.clicked.connect(self.close_bookshelf)
@@ -46,6 +44,7 @@ class BookShelfViewer(QtWidgets.QMainWindow, viewbookshelf.Ui_MainWindow):
                 else:
                     self.unmarkedBrowser.append(clean_name)
 
+
     def close_bookshelf(self):
         ''' Closes bookshelf window '''
         self.hide()
@@ -72,7 +71,6 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
         self.clearButton.clicked.connect(self.clear_new_poem)
         self.editButton.clicked.connect(self.edit_poem)
 
-    ### Functions ###
 
     def poem_name_input(self):
         ''' Triggers styling for poem name '''
@@ -83,6 +81,7 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
         else:
             self.nameInput.setStyleSheet("background-color: #99ff99")
 
+
     def author_name_input(self):
         ''' Triggers styling for author name '''
         self.test_for_save()
@@ -92,6 +91,7 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
         else:
             self.authorInput.setStyleSheet("background-color: #99ff99")
 
+
     def poem_text_input(self):
         ''' Triggers styling for poem text '''
         self.test_for_save()
@@ -100,6 +100,7 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
             self.poemInput.setStyleSheet("background-color:  #ff666b")
         else:
             self.poemInput.setStyleSheet("background-color: ")
+
 
     def test_for_save(self):
         ''' If all new poems inputs are > 0, save button is active'''
@@ -111,6 +112,7 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
         else:
             self.saveButton.setEnabled(False)
 
+
     def clear_new_poem(self):
         self.poemInput.setPlainText("")
         self.authorInput.setText("")
@@ -119,6 +121,7 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
         self.authorInput.setStyleSheet("background-color:  #ff666b")
         self.nameInput.setStyleSheet("background-color:  #ff666b")
         self.poemInput.setStyleSheet("background-color:  #ff666b")
+
 
     def save_poem(self):
         testname = str(self.nameInput.text().strip().lower())
@@ -135,7 +138,6 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
             with open("metadata.txt", "a") as meta_data:
                 new_poem_meta = "{};{}".format(file_name, "u\n")
                 meta_data.write(new_poem_meta)
-
         except FileExistsError:
             msg = QMessageBox
             overwrite = msg.question(self, 'File exists', "Overwrite poem?", QMessageBox.Yes | QMessageBox.No)
@@ -159,6 +161,7 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
         with open(poem, "r") as read_poem:
             raw_poem = read_poem.read()
             self.poemInput.setPlainText(raw_poem)
+
 
     def cancel_new_poem(self):
         self.hide()
@@ -191,9 +194,10 @@ Ctrl O  - Open Poem from file
 Ctrl N  - New / Edit poem
 Ctrl +  - Increase font size
 Ctrl -  - Decrease font size
-Ctrl h  - Speak line aloud
+Ctrl L  - Hide / Show line
+Ctrl H  - Hide / Show all
+Ctrl Y  - Read line aloud
 Esc     - Close poetry memorizer
-
 
 """)
         self.line_numbers = False
@@ -240,8 +244,6 @@ Esc     - Close poetry memorizer
         self.action_Fontplus.triggered.connect(self.increase_font)
 
 
-    ### Key Press Events """
-
     def keyPressEvent(self, e):
         global current_poem
         if e.key() == QtCore.Qt.Key_Escape:
@@ -254,7 +256,7 @@ Esc     - Close poetry memorizer
             self.open_poem()
         elif e.key() == QtCore.Qt.Key_H:
             try:
-               self.voice_over()
+               self.toggle_hide()
             except NameError:
                 print("load a poem first")
         elif e.key() == QtCore.Qt.Key_Plus:
@@ -266,15 +268,24 @@ Esc     - Close poetry memorizer
                self.timer()
             except NameError:
                 print("load a poem first")
+        elif e.key() == QtCore.Qt.Key_L:
+            try:
+               self.toggle_display_mode()
+            except NameError:
+                print("load a poem first")
+        elif e.key() == QtCore.Qt.Key_Y:
+            try:
+               self.voice_over()()
+            except NameError:
+                print("load a poem first")
 
-
-    ### Functions ###
 
     def decrease_font(self):
         '''Decrease font size'''
         self.font_value -= 1
         value_string = "font-size: {}px".format(str(self.font_value))
         self.poemdisplay.setStyleSheet(value_string)
+
 
     def increase_font(self):
         '''Increase font size'''
@@ -286,6 +297,7 @@ Esc     - Close poetry memorizer
     def view_bookshelf(self):
         ''' Opens bookshelf dialogue '''
         self.books.show()
+
 
     def timer(self):
         ''' starts / restarts timer '''
@@ -299,11 +311,13 @@ Esc     - Close poetry memorizer
         self.timer_var = time.time()
         self.lineentry.setFocus()
 
+
     def get_timer(self):
         ''' Time elapsed since last restart '''
         current_time = time.time()
         time_delta = current_time - float(self.timer_var)
         self.timerLcd.display(time_delta)
+
 
     def get_wpm(self, signal):
         ''' returns the wpm '''
@@ -317,6 +331,7 @@ Esc     - Close poetry memorizer
         self.wpm = ((word_count + 1) / (time_delta / 60))
         self.wpmLcd.display(self.wpm)
 
+
     def activate_buttons(self, bool):
         ''' buttons only allowed when there is current poem '''
         self.hide.setEnabled(bool)
@@ -327,12 +342,14 @@ Esc     - Close poetry memorizer
         self.obfuscator.setEnabled(bool)
         self.startTimeButton.setEnabled(bool)
 
+
     def use_all_poems(self):
         self.use_which_poems(signal = "a")
         self.actionUse_memorized.setEnabled(True)
         self.actionUse_all_2.setEnabled(False)
         self.actionUse_learning_2.setEnabled(True)
         self.footer_label.setText("Using all poems")
+
 
     def use_learning_poems(self, signal):
         self.use_which_poems(signal = "l")
@@ -349,33 +366,41 @@ Esc     - Close poetry memorizer
         self.actionUse_all_2.setEnabled(True)
         self.footer_label.setText("Using memorized poems")
 
+
     def use_which_poems(self, signal):
         self.bookshelf_flag = signal
+
 
     def new_poem(self):
         ''' handler for new poem window '''
         self.dialog.show()
+
 
     def load_metadata(self):
         ''' May be used for 'use all' etc... functionality '''
         with open('./metadata.txt', 'r') as metas:
             return metas.readlines()
 
+
     def memorized_poem(self):
         ''' Set poem metadata to memorized '''
         self.amend_book_info("m")
+
 
     def learn_poem(self):
         ''' Set poem metadata to learning '''
         self.amend_book_info("l")
 
+
     def ignore_poem(self):
         ''' Set poem metadata to ignore '''
         self.amend_book_info("x")
 
+
     def untag_poem(self):
         ''' Untag poem '''
         self.amend_book_info("u")
+
 
     def amend_book_info(self, signal):
         ''' Takes relevant signal and sets books meta status'''
@@ -400,7 +425,6 @@ Esc     - Close poetry memorizer
                     else:
                         meta_parsed = i
                     new_meta.append(meta_parsed)
-
             with open(catalogue, "w") as write_metas:
                 for i in new_meta:
                     write_metas.write(i)
@@ -444,6 +468,7 @@ Esc     - Close poetry memorizer
                     self.lineentry.setText("")
                     self.print_current_poem()
 
+
     def open_poem(self):
         ''' Load a poem from file explorer '''
         global current_poem
@@ -458,6 +483,7 @@ Esc     - Close poetry memorizer
                 current_poem.append([index, i])
                 self.progress_whole = len(current_poem)
         self.print_current_poem()
+
 
     def random_poem(self):
         '''Loads random poem - in serious need of refactoring :( '''
@@ -506,12 +532,14 @@ Esc     - Close poetry memorizer
                 self.progress_whole = len(current_poem)
             self.print_current_poem()
 
+
     def update_name(self, new_name):
         '''updates the name of the poem'''
         global poem_name
         poem_name = new_name.replace("_", " ").replace(".txt", "").replace("-", " - ")
         self.poemname.setText(poem_name.title())
         poem_name = new_name
+
 
     def refresh_poem(self):
         '''reinstates all lines of poem'''
@@ -526,6 +554,7 @@ Esc     - Close poetry memorizer
                 current_poem.append([index, i])
             self.progress_whole = len(current_poem)
         self.print_current_poem()
+
 
     def obfuscate_poem(self):
         ''' Variable obfuscator for words in poem. '''
@@ -562,8 +591,6 @@ Esc     - Close poetry memorizer
             current_poem = obfuscated_poem
             obfuscated_poem = backup_poem
             self.print_current_poem()
-
-
         else:
             self.obfusc_flag = False
             self.print_current_poem()
@@ -573,6 +600,7 @@ Esc     - Close poetry memorizer
         ''' Reads first line of current poem aloud '''
         global current_poem
         call(["espeak", current_poem[0][1]])
+
 
     def toggle_line_nos(self):
         ''' Toggles line numbers '''
@@ -589,6 +617,7 @@ Esc     - Close poetry memorizer
             except NameError:
                 return
 
+
     def toggle_display_mode(self):
         ''' Toggles line by line display mode '''
         if self.display_toggle == True:
@@ -600,6 +629,7 @@ Esc     - Close poetry memorizer
             self.display_mode.setText("Show line")
             self.print_current_poem()
 
+
     def toggle_hide(self):
         ''' Toggles hide text mode '''
         if self.hide_text == True:
@@ -610,6 +640,7 @@ Esc     - Close poetry memorizer
             self.hide_text = True
             self.hide.setText("Show")
             self.print_current_poem()
+
 
     def print_current_poem(self):
         ''' Prints the current poem on screen '''
@@ -630,7 +661,6 @@ Esc     - Close poetry memorizer
                 else:
                     self.poemdisplay.append(first_string.strip())
             self.poemdisplay.verticalScrollBar().setValue(0)
-
         else:
             if self.display_toggle == True:
                 if self.line_numbers == True:
@@ -661,6 +691,7 @@ Esc     - Close poetry memorizer
                         self.poemdisplay.append(i[1].strip())
             self.poemdisplay.verticalScrollBar().setValue(0)
 
+
     def chicken_dinner(self):
         ''' Triggers events on completion of poem entry '''
         if self.poem_progress.value() == 100:
@@ -671,7 +702,8 @@ Esc     - Close poetry memorizer
             self.timer_enabled = False
             self.footer_label.setText("Well done! Restart to go again.")
 
-    ### Launch ###
+
+### Launch ###
 app = QtWidgets.QApplication(sys.argv)
 form = MainDialog()
 form.show()
