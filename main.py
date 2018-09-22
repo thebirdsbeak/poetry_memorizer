@@ -19,6 +19,7 @@ class BookShelfViewer(QtWidgets.QMainWindow, viewbookshelf.Ui_MainWindow):
         self.setupUi(self)
         self.load_info()
 
+
         ### Events ###
         self.closeButton.clicked.connect(self.close_bookshelf)
         self.refreshButton.clicked.connect(self.load_info)
@@ -174,6 +175,8 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
         super(MainDialog, self).__init__(parent)
         self.setupUi(self)
         self.book_status = []
+        self.font_value = 14
+        self.poemdisplay.setStyleSheet("font-size: 14px")
 
     ### Settings ###
         self.poemdisplay.setText("Welcome to poetry memorizer!\n\n\
@@ -219,9 +222,24 @@ Try the different toggles to increase the difficulty as you advance.")
         self.actionUse_learning_2.triggered.connect(self.use_learning_poems)
         self.actionUse_memorized.triggered.connect(self.use_memorized_poems)
         self.actionView_bookshelf.triggered.connect(self.view_bookshelf)
+        self.action_Fontminus.triggered.connect(self.decrease_font)
+        self.action_Fontplus.triggered.connect(self.increase_font)
 
 
     ### Functions ###
+
+    def decrease_font(self):
+        '''Decrease font size'''
+        self.font_value -= 1
+        value_string = "font-size: {}px".format(str(self.font_value))
+        self.poemdisplay.setStyleSheet(value_string)
+
+    def increase_font(self):
+        '''Increase font size'''
+        self.font_value += 1
+        value_string = "font-size: {}px".format(str(self.font_value))
+        self.poemdisplay.setStyleSheet(value_string)
+
 
     def view_bookshelf(self):
         ''' Opens bookshelf dialogue '''

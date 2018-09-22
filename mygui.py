@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'second.ui'
+# Form implementation generated from reading ui file 'mygui.ui'
 #
-# Created by: PyQt5 UI code generator 5.10
+# Created by: PyQt5 UI code generator 5.11.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -96,6 +96,8 @@ class Ui_MainWindow(object):
         self.timerLabel.setObjectName("timerLabel")
         self.gridLayout_2.addWidget(self.timerLabel, 4, 8, 1, 1)
         self.verticalLayout_2.addLayout(self.gridLayout_2)
+        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.verticalLayout_2.addItem(spacerItem2)
         self.gridLayout_5 = QtWidgets.QGridLayout()
         self.gridLayout_5.setObjectName("gridLayout_5")
         self.footer_label = QtWidgets.QLabel(self.centralwidget)
@@ -106,7 +108,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addLayout(self.verticalLayout_2, 1, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 793, 28))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 793, 20))
         self.menubar.setObjectName("menubar")
         self.menuLexpad = QtWidgets.QMenu(self.menubar)
         self.menuLexpad.setObjectName("menuLexpad")
@@ -114,6 +116,8 @@ class Ui_MainWindow(object):
         self.menuNew_poem.setObjectName("menuNew_poem")
         self.menuBookshelf = QtWidgets.QMenu(self.menubar)
         self.menuBookshelf.setObjectName("menuBookshelf")
+        self.menuView = QtWidgets.QMenu(self.menubar)
+        self.menuView.setObjectName("menuView")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -150,6 +154,10 @@ class Ui_MainWindow(object):
         self.actionUse_memorized.setObjectName("actionUse_memorized")
         self.actionUntag = QtWidgets.QAction(MainWindow)
         self.actionUntag.setObjectName("actionUntag")
+        self.action_Fontplus = QtWidgets.QAction(MainWindow)
+        self.action_Fontplus.setObjectName("action_Fontplus")
+        self.action_Fontminus = QtWidgets.QAction(MainWindow)
+        self.action_Fontminus.setObjectName("action_Fontminus")
         self.menuNew_poem.addAction(self.actionOpen)
         self.menuNew_poem.addAction(self.actionRandom)
         self.menuNew_poem.addAction(self.actionNew)
@@ -162,7 +170,10 @@ class Ui_MainWindow(object):
         self.menuBookshelf.addAction(self.actionUse_all_2)
         self.menuBookshelf.addAction(self.actionUse_learning_2)
         self.menuBookshelf.addAction(self.actionUse_memorized)
+        self.menuView.addAction(self.action_Fontplus)
+        self.menuView.addAction(self.action_Fontminus)
         self.menubar.addAction(self.menuLexpad.menuAction())
+        self.menubar.addAction(self.menuView.menuAction())
         self.menubar.addAction(self.menuBookshelf.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -183,10 +194,11 @@ class Ui_MainWindow(object):
         self.missing_label.setText(_translate("MainWindow", "Obfuscate"))
         self.wpmLabel.setText(_translate("MainWindow", "WPM"))
         self.timerLabel.setText(_translate("MainWindow", "Time"))
-        self.footer_label.setText(_translate("MainWindow", "(c) thebirdsbeak.com"))
+        self.footer_label.setText(_translate("MainWindow", "Using all poems"))
         self.menuLexpad.setTitle(_translate("MainWindow", "File"))
         self.menuNew_poem.setTitle(_translate("MainWindow", "New poem"))
         self.menuBookshelf.setTitle(_translate("MainWindow", "Bookshelf"))
+        self.menuView.setTitle(_translate("MainWindow", "View"))
         self.actionMove_to_learning.setText(_translate("MainWindow", "Tag as learning"))
         self.actionMove_to_memorised.setText(_translate("MainWindow", "Tag as memorized"))
         self.actionNever_learn.setText(_translate("MainWindow", "Tag as ignore"))
@@ -203,6 +215,8 @@ class Ui_MainWindow(object):
         self.actionUse_learning_2.setText(_translate("MainWindow", "Use learning"))
         self.actionUse_memorized.setText(_translate("MainWindow", "Use memorized"))
         self.actionUntag.setText(_translate("MainWindow", "Untag"))
+        self.action_Fontplus.setText(_translate("MainWindow", "Increase font"))
+        self.action_Fontminus.setText(_translate("MainWindow", "Decrease  font"))
 
 
 if __name__ == "__main__":

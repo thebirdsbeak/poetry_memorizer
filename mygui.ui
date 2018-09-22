@@ -192,11 +192,24 @@
        </layout>
       </item>
       <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <layout class="QGridLayout" name="gridLayout_5">
         <item row="2" column="2">
          <widget class="QLabel" name="footer_label">
           <property name="text">
-           <string>(c) thebirdsbeak.com</string>
+           <string>Using all poems</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -215,7 +228,7 @@
      <x>0</x>
      <y>0</y>
      <width>793</width>
-     <height>28</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLexpad">
@@ -245,7 +258,15 @@
     <addaction name="actionUse_learning_2"/>
     <addaction name="actionUse_memorized"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="action_Fontplus"/>
+    <addaction name="action_Fontminus"/>
+   </widget>
    <addaction name="menuLexpad"/>
+   <addaction name="menuView"/>
    <addaction name="menuBookshelf"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -327,6 +348,16 @@
   <action name="actionUntag">
    <property name="text">
     <string>Untag</string>
+   </property>
+  </action>
+  <action name="action_Fontplus">
+   <property name="text">
+    <string>Increase font</string>
+   </property>
+  </action>
+  <action name="action_Fontminus">
+   <property name="text">
+    <string>Decrease  font</string>
    </property>
   </action>
  </widget>
