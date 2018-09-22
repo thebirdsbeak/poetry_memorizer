@@ -6,107 +6,89 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>807</width>
-    <height>560</height>
+    <width>736</width>
+    <height>519</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Bookshelf</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>791</width>
-      <height>451</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="1">
-      <widget class="QLabel" name="learningLabel">
-       <property name="text">
-        <string>Learning</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="ignoredLabel">
-       <property name="text">
-        <string>Ignored</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QTextBrowser" name="memorizedBrowser"/>
-     </item>
-     <item row="1" column="1">
-      <widget class="QTextBrowser" name="learningBrowser"/>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="memorizedLabel">
-       <property name="text">
-        <string>Memorized</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="hitlistLabel">
-       <property name="text">
-        <string>Unmarked</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QTextBrowser" name="ignoredBrowser"/>
-     </item>
-     <item row="3" column="0">
-      <widget class="QTextBrowser" name="unmarkedBrowser"/>
-     </item>
-     <item row="4" column="0" colspan="2">
-      <layout class="QHBoxLayout" name="horizontalLayout_4"/>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QPushButton" name="closeButton">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>470</y>
-      <width>92</width>
-      <height>36</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Close</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="refreshButton">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>470</y>
-      <width>90</width>
-      <height>36</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Refresh</string>
-    </property>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0" colspan="2">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="1">
+       <widget class="QLabel" name="learningLabel">
+        <property name="text">
+         <string>Learning</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="ignoredLabel">
+        <property name="text">
+         <string>Ignored</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QTextBrowser" name="memorizedBrowser"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QTextBrowser" name="learningBrowser"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="memorizedLabel">
+        <property name="text">
+         <string>Memorized</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="hitlistLabel">
+        <property name="text">
+         <string>Unmarked</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QTextBrowser" name="ignoredBrowser"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QTextBrowser" name="unmarkedBrowser"/>
+      </item>
+      <item row="4" column="0" colspan="2">
+       <layout class="QHBoxLayout" name="horizontalLayout_4"/>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="closeButton">
+      <property name="text">
+       <string>Close</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="refreshButton">
+      <property name="text">
+       <string>Refresh</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
    <zorder>closeButton</zorder>
    <zorder>gridLayoutWidget</zorder>
    <zorder>refreshButton</zorder>
@@ -116,8 +98,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>807</width>
-     <height>28</height>
+     <width>736</width>
+     <height>20</height>
     </rect>
    </property>
   </widget>
