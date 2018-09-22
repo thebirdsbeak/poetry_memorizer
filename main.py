@@ -1,9 +1,6 @@
 # To do:
 
-# Clear bookshelf on refresh
 # Add setenabled logic to 'use all' etc
-# Set metadata on adding new poem
-# Make sure metadata.txt picks up new files
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
@@ -30,6 +27,11 @@ class BookShelfViewer(QtWidgets.QMainWindow, viewbookshelf.Ui_MainWindow):
 		self.refreshButton.clicked.connect(self.load_info)
 
 	def load_info(self):
+		''' clears text browsers and reloads metadata '''
+		self.learningBrowser.setText("")
+		self.memorizedBrowser.setText("")
+		self.ignoredBrowser.setText("")
+		self.unmarkedBrowser.setText("")
 		with open("metadata.txt", "r") as meta_file:
 			meta_contents = meta_file.readlines()
 			for i in meta_contents:
@@ -42,12 +44,12 @@ class BookShelfViewer(QtWidgets.QMainWindow, viewbookshelf.Ui_MainWindow):
 				elif meta_tag == "m\n":
 					self.memorizedBrowser.append(clean_name)
 				elif meta_tag == "x\n":
-					self.ignoreBrowser.append(clean_name)
+					self.ignoredBrowser.append(clean_name)
 				else:
 					self.unmarkedBrowser.append(clean_name)
 				
-	
 	def close_bookshelf(self):
+		''' Closes bookshelf window '''
 		self.hide()
 		
 
@@ -132,7 +134,10 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 			with open(save_name, "x") as save_me:
 				save_me.write(text_to_save)
 			self.poemStatus.setText("Saved {}".format(file_name))
-			
+			with open("metadata.txt", "a") as meta_data:
+				new_poem_meta = "{};{}".format(file_name, "u\n")
+				meta_data.write(new_poem_meta)
+								
 		except FileExistsError:
 			msg = QMessageBox
 			overwrite = msg.question(self, 'File exists', "Overwrite poem?", QMessageBox.Yes | QMessageBox.No)
@@ -140,6 +145,7 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
 				with open(save_name, "w") as save_me:
 					save_me.write(text_to_save)
 				self.poemStatus.setText("Saved {}".format(file_name))
+
 	
 	def edit_poem(self):
 		filename = QtWidgets.QFileDialog.getOpenFileName(self, "Edit poem", "./bookshelf")
@@ -186,7 +192,7 @@ Try the different to increase the difficulty as you advance.")
 		self.timer_var = float
 		self.final_time = float
 		self.timer_enabled = False
-		self.actionUse_all.setEnabled(False)
+		self.actionUse_all_2.setEnabled(False)
 		self.activate_buttons(False)
 		self.dialog = NewPoem(self)
 		self.books = BookShelfViewer(self)
@@ -212,9 +218,11 @@ Try the different to increase the difficulty as you advance.")
 		self.actionOpen.triggered.connect(self.open_poem)
 		self.actionNew.triggered.connect(self.new_poem)
 		self.startTimeButton.clicked.connect(self.timer)
-		self.actionUse_all.triggered.connect(self.use_all_poems)
-		self.actionUse_learning.triggered.connect(self.use_learning_poems)
+		self.actionUse_all_2.triggered.connect(self.use_all_poems)
+		self.actionUse_learning_2.triggered.connect(self.use_learning_poems)
+		self.actionUse_memorized.triggered.connect(self.use_memorized_poems)
 		self.actionView_bookshelf.triggered.connect(self.view_bookshelf)
+
 
 	### Functions ###
 	
@@ -264,13 +272,21 @@ Try the different to increase the difficulty as you advance.")
 	
 	def use_all_poems(self):
 		self.use_which_poems(signal = "a")
-		self.actionUse_all.setEnabled(False)
-		self.actionUse_learning.setEnabled(True)
+		self.actionUse_memorized.setEnabled(True)
+		self.actionUse_all_2.setEnabled(False)
+		self.actionUse_learning_2.setEnabled(True)
 	
 	def use_learning_poems(self, signal):
 		self.use_which_poems(signal = "l")
-		self.actionUse_learning.setEnabled(False)
-		self.actionUse_all.setEnabled(True)
+		self.actionUse_memorized.setEnabled(True)
+		self.actionUse_learning_2.setEnabled(False)
+		self.actionUse_all_2.setEnabled(True)
+		
+	def use_memorized_poems(self, signal):
+		self.use_which_poems(signal = "m")
+		self.actionUse_memorized.setEnabled(False)
+		self.actionUse_learning_2.setEnabled(True)
+		self.actionUse_all_2.setEnabled(True)
 				
 	def use_which_poems(self, signal):
 		self.bookshelf_flag = signal
@@ -383,7 +399,7 @@ Try the different to increase the difficulty as you advance.")
 		self.print_current_poem()
 	
 	def random_poem(self):
-		'''Loads random poem'''
+		'''Loads random poem - in serious need of refactoring :( '''
 		global current_poem
 		current_poem = []
 		self.poem_progress.setProperty("value", 0)
@@ -394,6 +410,19 @@ Try the different to increase the difficulty as you advance.")
 			bookshelf = []
 			for i in meta_data:
 				if i.split(";")[1] != "x\n":					
+					bookshelf.append(i.split(';'))
+			chosen_poem = choice(bookshelf)
+			with open("./bookshelf/" + str(chosen_poem[0]), "r") as page:
+				self.update_name(chosen_poem[0])
+				raw_poem = page.readlines()
+				for index, i in enumerate(raw_poem):
+					current_poem.append([index, i])
+				self.progress_whole = len(current_poem)
+			self.print_current_poem()
+		elif self.bookshelf_flag == "m":
+			bookshelf = []
+			for i in meta_data:
+				if i.split(";")[1] == "m\n":
 					bookshelf.append(i.split(';'))
 			chosen_poem = choice(bookshelf)
 			with open("./bookshelf/" + str(chosen_poem[0]), "r") as page:
