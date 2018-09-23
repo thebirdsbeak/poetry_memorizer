@@ -495,10 +495,19 @@ Esc     - Close poetry memorizer
                     del current_poem[0]
                     current_progress = len(current_poem)
                     progress = int(((self.progress_whole - current_progress)/self.progress_whole) * 100)
-                    self.poem_progress.setProperty("value", progress)
+
+                    if current_progress == 1:
+                        if current_poem[0][1] == "\n":
+                            self.poem_progress.setValue(100)
+                        else:
+                            self.poem_progress.setProperty("value", progress)
+                    else:
+                        self.poem_progress.setProperty("value", progress)
                     self.poemdisplay.setText("")
                     self.lineentry.setText("")
                     self.print_current_poem()
+
+
             else:
                 if entered_text == str(obfuscated_poem[0][1].strip()):
                     del current_poem[0]
@@ -531,7 +540,7 @@ Esc     - Close poetry memorizer
                 else:
                     stanza_list.append([i[0], i[1], counter])
             current_poem = stanza_list
-            self.progress_whole = len(current_poem)
+        self.progress_whole = len(current_poem)
         self.get_stanzas()
         self.print_current_poem()
 
@@ -752,15 +761,19 @@ Esc     - Close poetry memorizer
 
 
     def stanza_start(self):
+        global current_poem
         self.spinBoxEnd.setMinimum(self.spinBoxStart.value())
         self.stanza_tracker = [self.spinBoxStart.value(), self.spinBoxEnd.value()]
         self.refresh_poem()
+        self.progress_whole = len(current_poem)
         self.print_current_poem()
 
 
     def stanza_end(self):
+        global current_poem
         self.stanza_tracker = [self.spinBoxStart.value(), self.spinBoxEnd.value()]
         self.refresh_poem()
+        self.progress_whole = len(current_poem)
         self.print_current_poem()
 
     def get_stanzas(self):
