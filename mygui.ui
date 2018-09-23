@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>839</width>
-    <height>649</height>
+    <width>793</width>
+    <height>560</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,6 +58,22 @@
         <property name="spacing">
          <number>2</number>
         </property>
+        <item row="1" column="0">
+         <widget class="QSlider" name="obfuscator">
+          <property name="maximum">
+           <number>5</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="tickPosition">
+           <enum>QSlider::TicksBothSides</enum>
+          </property>
+          <property name="tickInterval">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="3">
          <widget class="QPushButton" name="display_mode">
           <property name="text">
@@ -94,6 +110,9 @@
           <property name="text">
            <string>Line Nos</string>
           </property>
+          <property name="flat">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item row="2" column="3">
@@ -103,46 +122,17 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QSlider" name="obfuscator">
-          <property name="maximum">
-           <number>5</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::TicksBothSides</enum>
-          </property>
-          <property name="tickInterval">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="2">
-         <widget class="QLCDNumber" name="wpmLcd"/>
-        </item>
         <item row="2" column="2">
          <widget class="QPushButton" name="refresh">
           <property name="text">
-           <string>Restart</string>
+           <string>Refresh</string>
           </property>
          </widget>
-        </item>
-        <item row="4" column="4">
-         <widget class="QLCDNumber" name="timerLcd"/>
         </item>
         <item row="2" column="4">
          <widget class="QPushButton" name="randomButton">
           <property name="text">
            <string>Random</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="3">
-         <widget class="QPushButton" name="startTimeButton">
-          <property name="text">
-           <string>Start Timer</string>
           </property>
          </widget>
         </item>
@@ -169,26 +159,6 @@
           </property>
          </spacer>
         </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="wpmLabel">
-          <property name="text">
-           <string>WPM</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="8">
-         <widget class="QLabel" name="timerLabel">
-          <property name="text">
-           <string>Time</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
         <item row="3" column="2">
          <widget class="QSpinBox" name="spinBoxStart"/>
         </item>
@@ -205,6 +175,46 @@
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QLCDNumber" name="timerLcd"/>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="wpmLabel">
+          <property name="text">
+           <string>WPM</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="timerLabel">
+          <property name="text">
+           <string>Time</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4">
+         <widget class="QPushButton" name="startTimeButton">
+          <property name="text">
+           <string>Start Timer</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QLCDNumber" name="wpmLcd"/>
+        </item>
+        <item row="5" column="4">
+         <widget class="QPushButton" name="stopTimeButton">
+          <property name="text">
+           <string>Stop Timer</string>
           </property>
          </widget>
         </item>
@@ -246,7 +256,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>839</width>
+     <width>793</width>
      <height>20</height>
     </rect>
    </property>

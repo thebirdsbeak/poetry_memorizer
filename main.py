@@ -184,10 +184,11 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
     ### Settings ###
         self.poemdisplay.setText("""Welcome to poetry memorizer!\n\n\
 Open a poem, then enter each line until complete.\n\
-Try the different toggles to increase the difficulty as you advance.\n
+Try the different toggles to increase the difficulty as you advance.
 
 Hotkeys:
 
+Ctrl S  - Restart poem
 Ctrl T  - Start / restart timer
 Ctrl R  - Random Poem
 Ctrl O  - Open Poem from file
@@ -196,7 +197,7 @@ Ctrl +  - Increase font size
 Ctrl -  - Decrease font size
 Ctrl L  - Hide / Show line
 Ctrl H  - Hide / Show all
-Ctrl Y  - Read line aloud
+Ctrl G  - Read line aloud
 Ctrl *  - Toggle line numbers
 Esc     - Close poetry memorizer
 
@@ -212,6 +213,7 @@ Esc     - Close poetry memorizer
         self.final_time = float
         self.timer_enabled = False
         self.actionUse_all_2.setEnabled(False)
+        self.stopTimeButton.setEnabled(False)
         self.activate_buttons(False)
         self.dialog = NewPoem(self)
         self.books = BookShelfViewer(self)
@@ -238,6 +240,7 @@ Esc     - Close poetry memorizer
         self.actionOpen.triggered.connect(self.open_poem)
         self.actionNew.triggered.connect(self.new_poem)
         self.startTimeButton.clicked.connect(self.timer)
+        self.stopTimeButton.clicked.connect(self.stop_timer)
         self.actionUse_all_2.triggered.connect(self.use_all_poems)
         self.actionUse_learning_2.triggered.connect(self.use_learning_poems)
         self.actionUse_memorized.triggered.connect(self.use_memorized_poems)
@@ -250,6 +253,7 @@ Esc     - Close poetry memorizer
 
     def keyPressEvent(self, e):
         global current_poem
+        # Always enabled functions
         if e.key() == QtCore.Qt.Key_Escape:
             self.close()
         elif e.key() == QtCore.Qt.Key_R:
@@ -258,37 +262,32 @@ Esc     - Close poetry memorizer
             self.new_poem()
         elif e.key() == QtCore.Qt.Key_O:
             self.open_poem()
-        elif e.key() == QtCore.Qt.Key_H:
-            try:
-               self.toggle_hide()
-            except NameError:
-                print("load a poem first")
         elif e.key() == QtCore.Qt.Key_Plus:
             self.increase_font()
         elif e.key() == QtCore.Qt.Key_Minus:
             self.decrease_font()
+        # Sometimes enabled functions
+        elif e.key() == QtCore.Qt.Key_H:
+            if self.hide.isEnabled():
+               self.toggle_hide()
         elif e.key() == QtCore.Qt.Key_T:
-            try:
+            if self.startTimeButton.isEnabled():
                self.timer()
-            except NameError:
-                print("load a poem first")
         elif e.key() == QtCore.Qt.Key_L:
-            try:
+            if self.display_mode.isEnabled():
                self.toggle_display_mode()
-            except NameError:
-                print("load a poem first")
-        elif e.key() == QtCore.Qt.Key_Y:
-            try:
+        elif e.key() == QtCore.Qt.Key_G:
+            if self.voiceover.isEnabled():
                self.voice_over()
-            except NameError:
-                print("load a poem first")
         elif e.key() == QtCore.Qt.Key_Asterisk:
-            try:
+            if self.line_nos.isEnabled():
                self.toggle_line_nos()
-            except NameError:
-                print("load a poem first")
-
-
+        elif e.key() == QtCore.Qt.Key_S:
+            if self.refresh.isEnabled():
+               self.refresh_poem()
+        elif e.key() == QtCore.Qt.Key_K:
+            if self.stopTimeButton.isEnabled():
+                   self.stop_timer()
 
     def decrease_font(self):
         '''Decrease font size'''
@@ -309,6 +308,16 @@ Esc     - Close poetry memorizer
         self.books.show()
 
 
+    def stop_timer(self):
+        ''' stops timer '''
+        self.wpmLcd.display(0)
+        self.timerLcd.display(0)
+        self.startTimeButton.setText("Start Timer")
+        self.timer_enabled = False
+        self.startTimeButton.setStyleSheet("background-color: ")
+        self.stopTimeButton.setStyleSheet("background-color: ")
+        self.stopTimeButton.setEnabled(False)
+
     def timer(self):
         ''' starts / restarts timer '''
         self.refresh_poem()
@@ -317,7 +326,9 @@ Esc     - Close poetry memorizer
         self.timerLcd.display(0)
         self.startTimeButton.setText("Restart")
         self.timer_enabled = True
-        self.startTimeButton.setStyleSheet("background-color: #99ff99")
+        self.stopTimeButton.setEnabled(True)
+        self.stopTimeButton.setStyleSheet("background-color: #ff666b; color:black;")
+        self.startTimeButton.setStyleSheet("background-color: #99ff99; color:black;")
         self.timer_var = time.time()
         self.lineentry.setFocus()
 
