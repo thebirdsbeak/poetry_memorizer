@@ -197,6 +197,7 @@ Ctrl -  - Decrease font size
 Ctrl L  - Hide / Show line
 Ctrl H  - Hide / Show all
 Ctrl Y  - Read line aloud
+Ctrl *  - Toggle line numbers
 Esc     - Close poetry memorizer
 
 """)
@@ -278,9 +279,15 @@ Esc     - Close poetry memorizer
                 print("load a poem first")
         elif e.key() == QtCore.Qt.Key_Y:
             try:
-               self.voice_over()()
+               self.voice_over()
             except NameError:
                 print("load a poem first")
+        elif e.key() == QtCore.Qt.Key_Asterisk:
+            try:
+               self.toggle_line_nos()
+            except NameError:
+                print("load a poem first")
+
 
 
     def decrease_font(self):
@@ -506,7 +513,17 @@ Esc     - Close poetry memorizer
                 raw_poem = page.readlines()
                 for index, i in enumerate(raw_poem):
                     current_poem.append([index, i])
-                self.progress_whole = len(current_poem)
+            stanza_list = []
+            counter = 1
+            for i in current_poem:
+                if i[1] == "\n":
+                    stanza_list.append([i[0],i[1], counter])
+                    counter += 1
+                else:
+                    stanza_list.append([i[0], i[1], counter])
+            current_poem = stanza_list
+            self.progress_whole = len(current_poem)
+            self.get_stanzas()
             self.print_current_poem()
         elif self.bookshelf_flag == "m":
             bookshelf = []
@@ -519,7 +536,17 @@ Esc     - Close poetry memorizer
                 raw_poem = page.readlines()
                 for index, i in enumerate(raw_poem):
                     current_poem.append([index, i])
-                self.progress_whole = len(current_poem)
+            stanza_list = []
+            counter = 1
+            for i in current_poem:
+                if i[1] == "\n":
+                    stanza_list.append([i[0],i[1], counter])
+                    counter += 1
+                else:
+                    stanza_list.append([i[0], i[1], counter])
+            current_poem = stanza_list
+            self.progress_whole = len(current_poem)
+            self.get_stanzas()
             self.print_current_poem()
         else:
             learning_choice = []
@@ -532,7 +559,17 @@ Esc     - Close poetry memorizer
                 raw_poem = page.readlines()
                 for index, i in enumerate(raw_poem):
                     current_poem.append([index, i])
-                self.progress_whole = len(current_poem)
+            stanza_list = []
+            counter = 1
+            for i in current_poem:
+                if i[1] == "\n":
+                    stanza_list.append([i[0],i[1], counter])
+                    counter += 1
+                else:
+                    stanza_list.append([i[0], i[1], counter])
+            current_poem = stanza_list
+            self.progress_whole = len(current_poem)
+            self.get_stanzas()
             self.print_current_poem()
 
 
@@ -555,6 +592,15 @@ Esc     - Close poetry memorizer
             raw_poem = page.readlines()
             for index, i in enumerate(raw_poem):
                 current_poem.append([index, i])
+            stanza_list = []
+            counter = 1
+            for i in current_poem:
+                if i[1] == "\n":
+                    stanza_list.append([i[0],i[1], counter])
+                    counter += 1
+                else:
+                    stanza_list.append([i[0], i[1], counter])
+            current_poem = stanza_list
             self.progress_whole = len(current_poem)
         self.print_current_poem()
 
@@ -648,30 +694,53 @@ Esc     - Close poetry memorizer
     def stanza_start(self):
         self.spinBoxEnd.setMinimum(self.spinBoxStart.value())
         self.stanza_tracker = [self.spinBoxStart.value(), self.spinBoxEnd.value()]
+        self.refresh_poem()
+        self.print_current_poem()
 
 
     def stanza_end(self):
         self.stanza_tracker = [self.spinBoxStart.value(), self.spinBoxEnd.value()]
+        self.refresh_poem()
+        self.print_current_poem()
 
-
-    def print_current_poem(self):
-        ''' Prints the current poem on screen '''
-        self.lineentry.setFocus()
+    def get_stanzas(self):
+        '''  Mins and maxes stanzas on newly opened poem '''
         global current_poem
-        self.poemdisplay.setText("")
-        self.activate_buttons(True)
-
         poem_string = ""
         for i in current_poem:
             poem_string += i[1]
         stanzas = poem_string.split("\n\n")
         numstanzas = len(stanzas)
-
         self.spinBoxEnd.setMaximum(numstanzas)
         self.spinBoxEnd.setMinimum(1)
         self.spinBoxEnd.setValue(numstanzas)
         self.spinBoxStart.setMaximum(numstanzas)
         self.spinBoxStart.setMinimum(1)
+        self.stanza_tracker = [1, numstanzas]
+
+    def print_current_poem(self):
+        ''' Prints the current poem on screen '''
+        print("hello")
+        self.lineentry.setFocus()
+        global current_poem
+        self.poemdisplay.setText("")
+        self.activate_buttons(True)
+
+
+        if self.stanza_tracker[0] + 1 == self.stanza_tracker[1]:
+            rangechanger = 1
+        else:
+            rangechanger = 1
+
+        temp_poem = []
+        numlist = [i for i in range(self.stanza_tracker[0], self.stanza_tracker[1] + rangechanger)]
+        print(numlist)
+        for x in current_poem:
+            print(x[2])
+            if x[2] in numlist:
+                temp_poem.append(x)
+        current_poem = temp_poem
+
 
         if self.hide_text == True:
             for i in current_poem:
