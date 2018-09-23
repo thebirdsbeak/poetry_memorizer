@@ -491,7 +491,17 @@ Esc     - Close poetry memorizer
             raw_poem = page.readlines()
             for index, i in enumerate(raw_poem):
                 current_poem.append([index, i])
-                self.progress_whole = len(current_poem)
+            stanza_list = []
+            counter = 1
+            for i in current_poem:
+                if i[1] == "\n":
+                    stanza_list.append([i[0],i[1], counter])
+                    counter += 1
+                else:
+                    stanza_list.append([i[0], i[1], counter])
+            current_poem = stanza_list
+            self.progress_whole = len(current_poem)
+        self.get_stanzas()
         self.print_current_poem()
 
 
