@@ -747,23 +747,19 @@ Esc     - Close poetry memorizer
         self.spinBoxStart.setMinimum(1)
         self.stanza_tracker = [1, numstanzas]
 
+
     def print_current_poem(self):
         ''' Prints the current poem on screen '''
-        print("hello")
         self.lineentry.setFocus()
         global current_poem
         self.poemdisplay.setText("")
         self.activate_buttons(True)
-
-
         temp_poem = []
         numlist = [i for i in range(self.stanza_tracker[0], self.stanza_tracker[1] + 1)]
         for x in current_poem:
             if x[2] in numlist:
                 temp_poem.append(x)
         current_poem = temp_poem
-
-
         if self.hide_text == True:
             for i in current_poem:
                 first_string = ""
