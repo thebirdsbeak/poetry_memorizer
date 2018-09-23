@@ -183,24 +183,25 @@ class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
 
     ### Settings ###
         self.poemdisplay.setText("""Welcome to poetry memorizer!\n\n\
-Open a poem, then enter each line until complete.\n\
-Try the different toggles to increase the difficulty as you advance.
+Open a poem, then enter each line until complete. Try the different toggles to increase the difficulty as you advance.
 
 Hotkeys:
-
 Ctrl S  - Restart poem
 Ctrl T  - Start / restart timer
 Ctrl R  - Random Poem
 Ctrl O  - Open Poem from file
 Ctrl N  - New / Edit poem
-Ctrl +  - Increase font size
-Ctrl -  - Decrease font size
 Ctrl L  - Hide / Show line
 Ctrl H  - Hide / Show all
 Ctrl G  - Read line aloud
+Ctrl 1  - Decrement starting stanza
+Ctrl 2  - Increment starting stanza
+Ctrl 3  - Decrement ending stanza
+Ctrl 4  - Increment ending stanza
 Ctrl *  - Toggle line numbers
+Ctrl +  - Increase font size
+Ctrl -  - Decrease font size
 Esc     - Close poetry memorizer
-
 """)
         self.line_numbers = False
         self.display_toggle = False
@@ -288,6 +289,25 @@ Esc     - Close poetry memorizer
         elif e.key() == QtCore.Qt.Key_K:
             if self.stopTimeButton.isEnabled():
                    self.stop_timer()
+        elif e.key() == QtCore.Qt.Key_1:
+            if self.refresh.isEnabled():
+                step_value = self.spinBoxStart.value() - 1
+                self.spinBoxStart.setValue(step_value)
+        elif e.key() == QtCore.Qt.Key_2:
+            if self.refresh.isEnabled():
+                step_value = self.spinBoxStart.value() + 1
+                self.spinBoxStart.setValue(step_value)
+        elif e.key() == QtCore.Qt.Key_3:
+            if self.refresh.isEnabled():
+               step_value = self.spinBoxEnd.value() - 1
+               self.spinBoxEnd.setValue(step_value)
+        elif e.key() == QtCore.Qt.Key_4:
+            if self.refresh.isEnabled():
+                step_value = self.spinBoxEnd.value() + 1
+                self.spinBoxEnd.setValue(step_value)
+
+
+
 
     def decrease_font(self):
         '''Decrease font size'''
