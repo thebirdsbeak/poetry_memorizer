@@ -510,10 +510,20 @@ Esc     - Close poetry memorizer
 
             else:
                 if entered_text == str(obfuscated_poem[0][1].strip()):
+                    if self.timer_enabled == True:
+                        self.get_wpm(current_line)
                     del current_poem[0]
+                    del obfuscated_poem[0]
                     current_progress = len(current_poem)
                     progress = int(((self.progress_whole - current_progress)/self.progress_whole) * 100)
-                    self.poem_progress.setProperty("value", progress)
+                    if current_progress == 1:
+                        print(obfuscated_poem)
+                        if obfuscated_poem[0][1] == "\n":
+                            self.poem_progress.setValue(100)
+                        else:
+                            self.poem_progress.setProperty("value", progress)
+                    else:
+                        self.poem_progress.setProperty("value", progress)
                     self.poemdisplay.setText("")
                     self.lineentry.setText("")
                     self.print_current_poem()
