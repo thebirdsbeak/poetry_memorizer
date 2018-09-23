@@ -627,12 +627,31 @@ Esc     - Close poetry memorizer
             for index, i in enumerate(raw_poem):
                 current_poem.append([index, i])
                 backup_poem.append([index, i])
-                self.progress_whole = len(current_poem)
+
+        stanza_list = []
+        counter = 1
+        for i in current_poem:
+            if i[1] == "\n":
+                stanza_list.append([i[0],i[1], counter])
+                counter += 1
+            else:
+                stanza_list.append([i[0], i[1], counter])
+        current_poem = stanza_list
+
+        temp_poem = []
+        numlist = [i for i in range(self.stanza_tracker[0], self.stanza_tracker[1] + 1)]
+        for x in current_poem:
+            if x[2] in numlist:
+                temp_poem.append(x)
+        current_poem = temp_poem
+        backup_poem = temp_poem
+
+
         gain = self.obfuscator.value()
         roullette_wheel = ["Hit", "Miss", "Miss", "Miss", "Miss"]
         if gain > 0:
             self.obfusc_flag = True
-            for index, i in enumerate(current_poem):
+            for i in current_poem:
                 obfuscated_string = ""
                 word_list = i[1].strip()
                 word_list = word_list.split(" ")
@@ -646,7 +665,7 @@ Esc     - Close poetry memorizer
                     else:
                         obfuscated_word = x
                     obfuscated_string += obfuscated_word + " "
-                obfuscated_poem.append([index, obfuscated_string])
+                obfuscated_poem.append([i[0], obfuscated_string, i[2]])
             current_poem = obfuscated_poem
             obfuscated_poem = backup_poem
             self.print_current_poem()
@@ -737,16 +756,9 @@ Esc     - Close poetry memorizer
         self.activate_buttons(True)
 
 
-        if self.stanza_tracker[0] + 1 == self.stanza_tracker[1]:
-            rangechanger = 1
-        else:
-            rangechanger = 1
-
         temp_poem = []
-        numlist = [i for i in range(self.stanza_tracker[0], self.stanza_tracker[1] + rangechanger)]
-        print(numlist)
+        numlist = [i for i in range(self.stanza_tracker[0], self.stanza_tracker[1] + 1)]
         for x in current_poem:
-            print(x[2])
             if x[2] in numlist:
                 temp_poem.append(x)
         current_poem = temp_poem
