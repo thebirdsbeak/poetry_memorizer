@@ -22,4 +22,3 @@ Potential future additions:
 
 * Command line interface
 * Easily importing poem files
-* Preferences such as font size
