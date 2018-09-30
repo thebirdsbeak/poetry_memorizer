@@ -6,8 +6,8 @@ import time
 from subprocess import call
 from random import choice, shuffle
 import mygui
-from poem_editor import *
-from book_shelf import *
+from poem_editor import NewPoem
+from book_shelf import BookShelfViewer
 
 
 class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
@@ -38,6 +38,7 @@ Ctrl N  - New / Edit poem
 Ctrl L  - Hide / Show line
 Ctrl H  - Hide / Show all
 Ctrl G  - Read line aloud
+Ctrl B  - Open Bookshelf
 Ctrl 1  - Decrement starting stanza
 Ctrl 2  - Increment starting stanza
 Ctrl 3  - Decrement ending stanza
@@ -66,6 +67,7 @@ Esc     - Close poetry memorizer
         self.poem_buffer = []
         self.bookshelf_flag = "a"
         self.stanza_tracker = []
+
 
     ### Events ###
         self.lineentry.returnPressed.connect(self.enter_line)
@@ -111,6 +113,8 @@ Esc     - Close poetry memorizer
             self.increase_font()
         elif e.key() == QtCore.Qt.Key_Minus:
             self.decrease_font()
+        elif e.key() == QtCore.Qt.Key_B:
+            self.view_bookshelf()
         # Sometimes enabled functions
         elif e.key() == QtCore.Qt.Key_H:
             if self.hide.isEnabled():
@@ -151,71 +155,19 @@ Esc     - Close poetry memorizer
                 self.spinBoxEnd.setValue(step_value)
 
 
-
-
-    def decrease_font(self):
-        '''Decrease font size'''
-        self.font_value -= 1
-        value_string = "font-size: {}px".format(str(self.font_value))
-        self.poemdisplay.setStyleSheet(value_string)
-
-
-    def increase_font(self):
-        '''Increase font size'''
-        self.font_value += 1
-        value_string = "font-size: {}px".format(str(self.font_value))
-        self.poemdisplay.setStyleSheet(value_string)
-
+    ### Launchers ###
 
     def view_bookshelf(self):
         ''' Opens bookshelf dialogue '''
         self.books.show()
 
 
-    def stop_timer(self):
-        ''' stops timer '''
-        self.wpmLcd.display(0)
-        self.timerLcd.display(0)
-        self.startTimeButton.setText("Start Timer")
-        self.timer_enabled = False
-        self.startTimeButton.setStyleSheet("background-color: ")
-        self.stopTimeButton.setStyleSheet("background-color: ")
-        self.stopTimeButton.setEnabled(False)
-
-    def timer(self):
-        ''' starts / restarts timer '''
-        self.refresh_poem()
-        self.poem_buffer = []
-        self.wpmLcd.display(0)
-        self.timerLcd.display(0)
-        self.startTimeButton.setText("Restart")
-        self.timer_enabled = True
-        self.stopTimeButton.setEnabled(True)
-        self.stopTimeButton.setStyleSheet("background-color: #ff666b; color:black;")
-        self.startTimeButton.setStyleSheet("background-color: #99ff99; color:black;")
-        self.timer_var = time.time()
-        self.lineentry.setFocus()
+    def new_poem(self):
+        ''' handler for new poem window '''
+        self.dialog.show()
 
 
-    def get_timer(self):
-        ''' Time elapsed since last restart '''
-        current_time = time.time()
-        time_delta = current_time - float(self.timer_var)
-        self.timerLcd.display(time_delta)
-
-
-    def get_wpm(self, signal):
-        ''' returns the wpm '''
-        poem_line = signal.split(" ")
-        self.poem_buffer.append(poem_line)
-        word_count = 0
-        current_time = time.time()
-        time_delta = current_time - float(self.timer_var)
-        for i in self.poem_buffer:
-            word_count += len(i)
-        self.wpm = ((word_count + 1) / (time_delta / 60))
-        self.wpmLcd.display(self.wpm)
-
+    ### States ###
 
     def activate_buttons(self, bool):
         ''' buttons only allowed when there is current poem '''
@@ -254,11 +206,6 @@ Esc     - Close poetry memorizer
 
     def use_which_poems(self, signal):
         self.bookshelf_flag = signal
-
-
-    def new_poem(self):
-        ''' handler for new poem window '''
-        self.dialog.show()
 
 
     def load_metadata(self):
@@ -317,61 +264,125 @@ Esc     - Close poetry memorizer
             return
 
 
-    def enter_line(self):
-        '''Tests line against first line in current_poem'''
+    ### Utilities ###
+
+    def decrease_font(self):
+        '''Decrease font size'''
+        self.font_value -= 1
+        value_string = "font-size: {}px".format(str(self.font_value))
+        self.poemdisplay.setStyleSheet(value_string)
+
+
+    def increase_font(self):
+        '''Increase font size'''
+        self.font_value += 1
+        value_string = "font-size: {}px".format(str(self.font_value))
+        self.poemdisplay.setStyleSheet(value_string)
+
+
+    def update_name(self, new_name):
+        '''updates the name of the poem'''
+        global poem_name
+        poem_name = new_name.replace("_", " ").replace(".txt", "").replace("-", " - ")
+        self.poemname.setText(poem_name.title())
+        poem_name = new_name
+
+
+    ### Timer ###
+
+    def stop_timer(self):
+        ''' stops timer '''
+        self.wpmLcd.display(0)
+        self.timerLcd.display(0)
+        self.startTimeButton.setText("Start Timer")
+        self.timer_enabled = False
+        self.startTimeButton.setStyleSheet("background-color: ")
+        self.stopTimeButton.setStyleSheet("background-color: ")
+        self.stopTimeButton.setEnabled(False)
+
+    def timer(self):
+        ''' starts / restarts timer '''
+        self.refresh_poem()
+        self.poem_buffer = []
+        self.wpmLcd.display(0)
+        self.timerLcd.display(0)
+        self.startTimeButton.setText("Restart")
+        self.timer_enabled = True
+        self.stopTimeButton.setEnabled(True)
+        self.stopTimeButton.setStyleSheet("background-color: #ff666b; color:black;")
+        self.startTimeButton.setStyleSheet("background-color: #99ff99; color:black;")
+        self.timer_var = time.time()
+        self.lineentry.setFocus()
+
+
+    def get_timer(self):
+        ''' Time elapsed since last restart '''
+        current_time = time.time()
+        time_delta = current_time - float(self.timer_var)
+        self.timerLcd.display(time_delta)
+
+
+    def get_wpm(self, signal):
+        ''' returns the wpm '''
+        poem_line = signal.split(" ")
+        self.poem_buffer.append(poem_line)
+        word_count = 0
+        current_time = time.time()
+        time_delta = current_time - float(self.timer_var)
+        for i in self.poem_buffer:
+            word_count += len(i)
+        self.wpm = ((word_count + 1) / (time_delta / 60))
+        self.wpmLcd.display(self.wpm)
+
+
+   ### Toggles ###
+
+    def voice_over(self):
+        ''' Reads first line of current poem aloud '''
         global current_poem
-        global obfuscated_poem
-        if self.lineentry.text() == "":
-            return
-        elif len(current_poem) == 0:
-            return
+        call(["espeak", current_poem[0][1]])
+
+
+    def toggle_line_nos(self):
+        ''' Toggles line numbers '''
+        if self.line_numbers == True:
+            self.line_numbers = False
+            try:
+                self.print_current_poem()
+            except NameError:
+                return
         else:
-            if self.timer_enabled == True:
-                self.get_timer()
-            entered_text = str(self.lineentry.text())
-            if str(current_poem[0][1].strip()) == "":
-                del current_poem[0]
-            if self.obfusc_flag == False:
-                current_line = str(current_poem[0][1].strip())
-                if entered_text == current_line:
-                    if self.timer_enabled == True:
-                        self.get_wpm(current_line)
-                    del current_poem[0]
-                    current_progress = len(current_poem)
-                    progress = int(((self.progress_whole - current_progress)/self.progress_whole) * 100)
-
-                    if current_progress == 1:
-                        if current_poem[0][1] == "\n":
-                            self.poem_progress.setValue(100)
-                        else:
-                            self.poem_progress.setProperty("value", progress)
-                    else:
-                        self.poem_progress.setProperty("value", progress)
-                    self.poemdisplay.setText("")
-                    self.lineentry.setText("")
-                    self.print_current_poem()
+            self.line_numbers = True
+            try:
+                self.print_current_poem()
+            except NameError:
+                return
 
 
-            else:
-                if entered_text == str(obfuscated_poem[0][1].strip()):
-                    if self.timer_enabled == True:
-                        self.get_wpm(current_line)
-                    del current_poem[0]
-                    del obfuscated_poem[0]
-                    current_progress = len(current_poem)
-                    progress = int(((self.progress_whole - current_progress)/self.progress_whole) * 100)
-                    if current_progress == 1:
-                        print(obfuscated_poem)
-                        if obfuscated_poem[0][1] == "\n":
-                            self.poem_progress.setValue(100)
-                        else:
-                            self.poem_progress.setProperty("value", progress)
-                    else:
-                        self.poem_progress.setProperty("value", progress)
-                    self.poemdisplay.setText("")
-                    self.lineentry.setText("")
-                    self.print_current_poem()
+    def toggle_display_mode(self):
+        ''' Toggles line by line display mode '''
+        if self.display_toggle == True:
+            self.display_mode.setText("Hide line")
+            self.display_toggle = False
+            self.print_current_poem()
+        else:
+            self.display_toggle = True
+            self.display_mode.setText("Show line")
+            self.print_current_poem()
 
+
+    def toggle_hide(self):
+        ''' Toggles hide text mode '''
+        if self.hide_text == True:
+            self.hide.setText("Hide")
+            self.hide_text = False
+            self.print_current_poem()
+        else:
+            self.hide_text = True
+            self.hide.setText("Show")
+            self.print_current_poem()
+
+    ### Loading poems ###
 
     def open_poem(self):
         ''' Load a poem from file explorer '''
@@ -477,14 +488,6 @@ Esc     - Close poetry memorizer
             self.print_current_poem()
 
 
-    def update_name(self, new_name):
-        '''updates the name of the poem'''
-        global poem_name
-        poem_name = new_name.replace("_", " ").replace(".txt", "").replace("-", " - ")
-        self.poemname.setText(poem_name.title())
-        poem_name = new_name
-
-
     def refresh_poem(self):
         '''reinstates all lines of poem'''
         global poem_name
@@ -568,51 +571,7 @@ Esc     - Close poetry memorizer
             self.print_current_poem()
 
 
-    def voice_over(self):
-        ''' Reads first line of current poem aloud '''
-        global current_poem
-        call(["espeak", current_poem[0][1]])
-
-
-    def toggle_line_nos(self):
-        ''' Toggles line numbers '''
-        if self.line_numbers == True:
-            self.line_numbers = False
-            try:
-                self.print_current_poem()
-            except NameError:
-                return
-        else:
-            self.line_numbers = True
-            try:
-                self.print_current_poem()
-            except NameError:
-                return
-
-
-    def toggle_display_mode(self):
-        ''' Toggles line by line display mode '''
-        if self.display_toggle == True:
-            self.display_mode.setText("Hide line")
-            self.display_toggle = False
-            self.print_current_poem()
-        else:
-            self.display_toggle = True
-            self.display_mode.setText("Show line")
-            self.print_current_poem()
-
-
-    def toggle_hide(self):
-        ''' Toggles hide text mode '''
-        if self.hide_text == True:
-            self.hide.setText("Hide")
-            self.hide_text = False
-            self.print_current_poem()
-        else:
-            self.hide_text = True
-            self.hide.setText("Show")
-            self.print_current_poem()
-
+    ### Stanzas ###
 
     def stanza_start(self):
         global current_poem
@@ -646,6 +605,8 @@ Esc     - Close poetry memorizer
         self.stanza_tracker = [1, numstanzas]
 
 
+    ### Print ###
+
     def print_current_poem(self):
         ''' Prints the current poem on screen '''
         self.lineentry.setFocus()
@@ -653,53 +614,118 @@ Esc     - Close poetry memorizer
         self.poemdisplay.setText("")
         self.activate_buttons(True)
         temp_poem = []
-        numlist = [i for i in range(self.stanza_tracker[0], self.stanza_tracker[1] + 1)]
-        for x in current_poem:
-            if x[2] in numlist:
-                temp_poem.append(x)
-        current_poem = temp_poem
-        if self.hide_text == True:
-            for i in current_poem:
-                first_string = ""
-                for x in i[1]:
-                    if x.lower() in self.alphabet:
-                        first_string += "_"
-                    else:
-                        first_string += x
-                if self.line_numbers == True:
-                    self.poemdisplay.append("{}. {}".format(i[0]+1, first_string.strip()))
-                else:
-                    self.poemdisplay.append(first_string.strip())
-            self.poemdisplay.verticalScrollBar().setValue(0)
-        else:
-            if self.display_toggle == True:
-                if self.line_numbers == True:
-                    first_string = ""
-                    for i in current_poem[0][1]:
-                        if i.lower() in self.alphabet:
-                            first_string += "_"
-                        else:
-                            first_string += i
-                    self.poemdisplay.append("{}. {}".format(current_poem[0][0]+1, first_string.strip()))
-                    for i in current_poem[1::]:
-                        self.poemdisplay.append("{}. {}".format(i[0]+1, i[1].strip()))
-                else:
-                    first_string = ""
-                    for i in current_poem[0][1]:
-                        if i.lower() in self.alphabet:
-                            first_string += "_"
-                        else:
-                            first_string += i
-                    self.poemdisplay.append(first_string.strip())
-                    for i in current_poem[1::]:
-                        self.poemdisplay.append(i[1].strip())
-            else:
+        if len(current_poem) > 0:
+            numlist = [i for i in range(self.stanza_tracker[0], self.stanza_tracker[1] + 1)]
+            for x in current_poem:
+                if x[2] in numlist:
+                    temp_poem.append(x)
+            current_poem = temp_poem
+            if self.hide_text == True:
                 for i in current_poem:
+                    first_string = ""
+                    for x in i[1]:
+                        if x.lower() in self.alphabet:
+                            first_string += "_"
+                        else:
+                            first_string += x
                     if self.line_numbers == True:
-                        self.poemdisplay.append("{}. {}".format(i[0]+1, i[1].strip()))
+                        self.poemdisplay.append("{}. {}".format(i[0]+1, first_string.strip()))
                     else:
-                        self.poemdisplay.append(i[1].strip())
-            self.poemdisplay.verticalScrollBar().setValue(0)
+                        self.poemdisplay.append(first_string.strip())
+                self.poemdisplay.verticalScrollBar().setValue(0)
+            else:
+
+                if self.display_toggle == True:
+                    if self.line_numbers == True:
+                        first_string = ""
+                        for i in current_poem[0][1]:
+                            if i.lower() in self.alphabet:
+                                first_string += "_"
+                            else:
+                                first_string += i
+                        self.poemdisplay.append("{}. {}".format(current_poem[0][0]+1, first_string.strip()))
+                        for i in current_poem[1::]:
+                            self.poemdisplay.append("{}. {}".format(i[0]+1, i[1].strip()))
+                    else:
+                        first_string = ""
+                        for i in current_poem[0][1]:
+                            if i.lower() in self.alphabet:
+                                first_string += "_"
+                            else:
+                                first_string += i
+                        self.poemdisplay.append(first_string.strip())
+                        for i in current_poem[1::]:
+                            self.poemdisplay.append(i[1].strip())
+
+
+                else:
+                    for i in current_poem:
+                        if self.line_numbers == True:
+                            self.poemdisplay.append("{}. {}".format(i[0]+1, i[1].strip()))
+                        else:
+                            self.poemdisplay.append(i[1].strip())
+                self.poemdisplay.verticalScrollBar().setValue(0)
+
+        else:
+            return
+
+
+    ### Business end ###
+
+    def enter_line(self):
+        '''Tests line against first line in current_poem'''
+        global current_poem
+        global obfuscated_poem
+        if self.lineentry.text() == "":
+            return
+        elif len(current_poem) == 0:
+            return
+        else:
+            if self.timer_enabled == True:
+                self.get_timer()
+            entered_text = str(self.lineentry.text())
+            if str(current_poem[0][1].strip()) == "":
+                del current_poem[0]
+            if self.obfusc_flag == False:
+                current_line = str(current_poem[0][1].strip())
+                if entered_text == current_line:
+                    if self.timer_enabled == True:
+                        self.get_wpm(current_line)
+                    del current_poem[0]
+                    current_progress = len(current_poem)
+                    progress = int(((self.progress_whole - current_progress)/self.progress_whole) * 100)
+
+                    if current_progress == 1:
+                        if current_poem[0][1] == "\n":
+                            self.poem_progress.setValue(100)
+                        else:
+                            self.poem_progress.setProperty("value", progress)
+                    else:
+                        self.poem_progress.setProperty("value", progress)
+                    self.poemdisplay.setText("")
+                    self.lineentry.setText("")
+                    self.print_current_poem()
+
+
+            else:
+                if entered_text == str(obfuscated_poem[0][1].strip()):
+                    if self.timer_enabled == True:
+                        self.get_wpm(current_line)
+                    del current_poem[0]
+                    del obfuscated_poem[0]
+                    current_progress = len(current_poem)
+                    progress = int(((self.progress_whole - current_progress)/self.progress_whole) * 100)
+                    if current_progress == 1:
+                        print(obfuscated_poem)
+                        if obfuscated_poem[0][1] == "\n":
+                            self.poem_progress.setValue(100)
+                        else:
+                            self.poem_progress.setProperty("value", progress)
+                    else:
+                        self.poem_progress.setProperty("value", progress)
+                    self.poemdisplay.setText("")
+                    self.lineentry.setText("")
+                    self.print_current_poem()
 
 
     def chicken_dinner(self):
@@ -711,7 +737,6 @@ Esc     - Close poetry memorizer
             self.startTimeButton.setStyleSheet("background-color:")
             self.timer_enabled = False
             self.footer_label.setText("Well done! Restart to go again.")
-
 
 ### Launch ###
 app = QtWidgets.QApplication(sys.argv)
