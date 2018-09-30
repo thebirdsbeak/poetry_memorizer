@@ -74,7 +74,7 @@ class Ui_mainWindow(object):
         self.poemName.setText(_translate("mainWindow", "Poem Name"))
         self.authorName.setText(_translate("mainWindow", "Author"))
         self.poemStatus.setText(_translate("mainWindow", "Not  Saved"))
-        self.cancelButton.setText(_translate("mainWindow", "Cancel"))
+        self.cancelButton.setText(_translate("mainWindow", "Close"))
         self.clearButton.setText(_translate("mainWindow", "Clear All"))
         self.editButton.setText(_translate("mainWindow", "Open / Edit Poem"))
         self.saveButton.setText(_translate("mainWindow", "Save"))

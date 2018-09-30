@@ -12,3 +12,5 @@ the_raven-e_a_poe.txt;l
 happy_the_man-john_dryden.txt;m
 the_walrus_and_the_carpenter-lewis_carroll.txt;l
 the_charge_of_the_light_brigade-a_l_tennyson.txt;l
+our_new_religion-arthur_guiterman.txt;u
+on_the_vanity_of_earthly_greatness-arthur_guiterman.txt;u
