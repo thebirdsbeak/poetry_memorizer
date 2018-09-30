@@ -736,9 +736,11 @@ Esc     - Close poetry memorizer
                 self.timerLcd.display(self.final_time)
             self.startTimeButton.setStyleSheet("background-color:")
             self.timer_enabled = False
-            self.footer_label.setText("Well done! Restart to go again.")
 
-### Launch ###
+
+
+    ### Launch ###
+
 app = QtWidgets.QApplication(sys.argv)
 form = MainDialog()
 form.show()
