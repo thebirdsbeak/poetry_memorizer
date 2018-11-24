@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
-import newpoem
-import mygui
+from designfiles import newpoem
+from designfiles import mygui
 
 
 class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
@@ -25,6 +25,16 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
         self.clearButton.clicked.connect(self.clear_new_poem)
         self.editButton.clicked.connect(self.edit_poem)
 
+    def keyPressEvent(self, e):
+        ''' Shortcuts for new poem mode '''
+        if e.key() == QtCore.Qt.Key_Escape:
+            self.hide()
+        elif e.key() == QtCore.Qt.Key_S:
+            self.save_poem()
+        elif e.key() == QtCore.Qt.Key_O:
+            self.edit_poem()
+        elif e.key() == QtCore.Qt.Key_K:
+            self.clear_new_poem()
 
     def poem_name_input(self):
         ''' Triggers styling for poem name '''
@@ -34,7 +44,6 @@ class NewPoem(QtWidgets.QMainWindow, newpoem.Ui_mainWindow):
             self.nameInput.setStyleSheet("background-color:  #ff666b")
         else:
             self.nameInput.setStyleSheet("background-color: #99ff99")
-
 
     def author_name_input(self):
         ''' Triggers styling for author name '''

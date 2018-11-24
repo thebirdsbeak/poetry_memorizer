@@ -5,28 +5,12 @@ import os
 import time
 from subprocess import call
 from random import choice, shuffle
-import mygui
+from designfiles import mygui
 from poem_editor import NewPoem
 from book_shelf import BookShelfViewer
+from short_cuts import ShortcutViewer
 
-
-class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
-
-    ### Variables ###
-    current_poem = []
-    obfuscated_poem = []
-    poem_name = ""
-
-    ### Setup ###
-    def __init__(self, parent=None):
-        super(MainDialog, self).__init__(parent)
-        self.setupUi(self)
-        self.book_status = []
-        self.font_value = 14
-        self.poemdisplay.setStyleSheet("font-size: 14px")
-
-    ### Settings ###
-        self.poemdisplay.setText("""Welcome to poetry memorizer!\n\n\
+help_text = """Welcome to poetry memorizer!\n\n\
 Open a poem, then enter each line until complete. Try the different toggles to increase the difficulty as you advance.
 
 Hotkeys:
@@ -47,7 +31,26 @@ Ctrl *  - Toggle line numbers
 Ctrl +  - Increase font size
 Ctrl -  - Decrease font size
 Esc     - Close poetry memorizer
-""")
+Ctrl ?  - Show shortcuts"""
+
+class MainDialog(QtWidgets.QMainWindow, mygui.Ui_MainWindow):
+
+    ### Variables ###
+    current_poem = []
+    obfuscated_poem = []
+    poem_name = ""
+
+    ### Setup ###
+    def __init__(self, parent=None):
+        super(MainDialog, self).__init__(parent)
+        self.setupUi(self)
+        self.book_status = []
+        self.font_value = 14
+        self.poemdisplay.setStyleSheet("font-size: 14px")
+
+    ### Settings ###
+        self.poemdisplay.setText(help_text)
+
         self.line_numbers = False
         self.display_toggle = False
         self.hide_text = False
@@ -63,6 +66,7 @@ Esc     - Close poetry memorizer
         self.activate_buttons(False)
         self.dialog = NewPoem(self)
         self.books = BookShelfViewer(self)
+        self.shortcuts = ShortcutViewer(self)
         self.wpm = float
         self.poem_buffer = []
         self.bookshelf_flag = "a"
@@ -103,6 +107,8 @@ Esc     - Close poetry memorizer
         # Always enabled functions
         if e.key() == QtCore.Qt.Key_Escape:
             self.close()
+        elif e.key() == QtCore.Qt.Key_Question:
+            self.view_shortcuts()
         elif e.key() == QtCore.Qt.Key_R:
             self.random_poem()
         elif e.key() == QtCore.Qt.Key_N:
@@ -158,7 +164,7 @@ Esc     - Close poetry memorizer
     ### Launchers ###
 
     def view_bookshelf(self):
-        ''' Opens bookshelf dialogue '''
+        ''' Opens bookshelf window '''
         self.books.show()
 
 
@@ -166,6 +172,9 @@ Esc     - Close poetry memorizer
         ''' handler for new poem window '''
         self.dialog.show()
 
+    def view_shortcuts(self):
+        ''' Opens shortcut dialog '''
+        self.shortcuts.show()
 
     ### States ###
 

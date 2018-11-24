@@ -22,9 +22,12 @@ One they are installed, simply run main.py.
 * Add new poems and edit existing
 * Select a range of stanzas to learn
 
-## In progress:
+## To do:
 
 * Save best times
+* Shortcuts in bookshelf etc...
+* More default public domain poetry
+* Shortcut for help menu
 
 ## Potential future additions:
 

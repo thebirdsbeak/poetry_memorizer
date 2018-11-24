@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
-import mygui
-import viewbookshelf
+from designfiles import mygui
+from designfiles import viewbookshelf
 
 class BookShelfViewer(QtWidgets.QMainWindow, viewbookshelf.Ui_MainWindow):
 
@@ -15,6 +15,12 @@ class BookShelfViewer(QtWidgets.QMainWindow, viewbookshelf.Ui_MainWindow):
         ### Events ###
         self.closeButton.clicked.connect(self.close_bookshelf)
         self.refreshButton.clicked.connect(self.load_info)
+
+    def keyPressEvent(self, e):
+        if e.key() == QtCore.Qt.Key_Escape:
+            self.close()
+        elif e.key() == QtCore.Qt.Key_R:
+            self.load_info()
 
     def load_info(self):
         # ''' clears text browsers and reloads metadata '''
@@ -37,7 +43,6 @@ class BookShelfViewer(QtWidgets.QMainWindow, viewbookshelf.Ui_MainWindow):
                     self.ignoredBrowser.append(clean_name)
                 else:
                     self.unmarkedBrowser.append(clean_name)
-
 
     def close_bookshelf(self):
         ''' Closes bookshelf window '''
